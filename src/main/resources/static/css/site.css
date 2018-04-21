@@ -1,0 +1,163 @@
+body {
+    margin-top: 115px;
+}
+
+hr{
+    padding: 0px;
+    margin: 20px 0px;
+}
+
+/* =================================================================*/
+/* =================== Viršutinis meniu ============================*/
+.lower {
+    top: 55px;
+}
+
+.upper {
+    background-color: #6c757d;
+}
+
+.navbar-categories {
+    background-color: #90AA3C;
+}
+
+.navbar {
+    font-weight: 300;
+}
+
+.nav-link {
+    padding: 0rem 0rem;  
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+nav#top-nav-lower.navbar.fixed-top.navbar-categories.lower a{
+    color: black;
+}
+
+nav div a.nav-item::after {
+    content: "|";
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.no-separator::after {
+    content: none;
+}
+
+.hamburger {
+    padding: 0px 20px;
+    padding-left: 10px;
+    padding-top: 3px;
+}
+
+/* =================================================================*/
+/* ============ Prisijungimo ir registracijos formos ===============*/
+.login-register-card {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.card-link-active {
+    color: green;
+    font-weight: bold;
+}
+
+.card-link-inactive {
+    color: gray;
+    font-weight: normal;
+}
+
+#sidebar-wrapper {
+    top: 103px;
+    background-color: black;
+}
+
+
+/* =================================================================*/
+/* ===================== Laukų validacija ==========================*/
+#indicator{
+    width:20px;
+    height:20px;
+    display:block;
+    border-radius:10px;
+}
+
+.green{
+    margin-top: 5px;
+    background-color: green;
+}
+.red{
+    margin-top: 5px;
+    background-color: palevioletred;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+.error::before {
+    content: "*";
+}
+
+.fieldError {
+    background-color: #ffb3b3;
+}
+
+
+/* =================================================================*/
+/* ======================== Straipsniai ============================*/
+
+#page-content-wrapper {
+    padding: 50px;
+}
+
+.imgBox:hover
+{
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px #ccc;
+}
+
+
+.article-thumbnail-link {
+    color: black;
+}
+
+
+.article-thumbnail-link:hover {
+    color: gray;
+    text-decoration: none;
+}
+
+
+/* =================================================================*/
+/* =================== Sidebar menu ================================*/
+
+.side-menu-header {
+    display: block;
+    color: #999999;
+    line-height: 40px;
+    text-indent: 20px;
+    padding-top: 20px;
+}
+
+.sidebar-nav li {
+    text-indent: 25px;
+    line-height: 25px;
+}
+
+.sidebar-menu-btn {
+    margin-top: 10px;
+    padding: 3px 4px;
+    color: black;
+    background-color: #6a707c;
+}
+
+.sidebar-menu-btn:hover {
+    color: black;
+    background-color: #999999;
+}

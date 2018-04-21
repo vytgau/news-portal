@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+
+<div th:fragment="home-side-menu" id="sidebar-wrapper" sec:authorize="isAuthenticated()">
+    <ul class="sidebar-nav">
+        <div class="side-menu-header">
+            <h4>Mano grupės</h4>
+        </div>
+
+        <!-- A list of groups that a user is a member of -->
+        <div id="groups-list">
+            <script>
+                $.getJSON(
+                    "/get/groups", function (data) {
+                        var items = [];
+                        $.each(data, function (index, group) {
+                            var id = group.id;
+                            var title = group.title;
+
+                            items.push("<li><a href=\group?id=" + id + ">" + title + "</a></li>");
+                        });
+
+                        if (items.length > 0) {
+                            $("#groups-list").append(items.join(""));
+                        }
+                    }
+                );
+            </script>
+        </div>
+
+        <li>
+            <form action="#" method="get">
+                <button type="button" class="btn sidebar-menu-btn">Kurti naują</button>
+            </form>
+        </li>
+        <li>
+            <!-- A custom dropdown menu containing invitations to groups (not implemented yet) -->
+            <div class="dropdown">
+                <button class="btn dropdown-toggle sidebar-menu-btn" type="button">
+                    Pakvietimai
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Pakvietimas1</a>
+                    <a class="dropdown-item" href="#">Pakvietimas2</a>
+                    <a class="dropdown-item" href="#">Pakvietimas3</a>
+                </div>
+            </div>
+        </li>
+        <br>
+
+        <div sec:authorize="hasAnyRole('ROLE_WRITER','ROLE_ADMIN')">
+            <div class="side-menu-header">
+                <h4>Mano Straipsniai</h4>
+            </div>
+            <li>
+                <form action="#" method="get">
+                    <button type="button" class="btn sidebar-menu-btn">Peržiūrėti straipsnius</button>
+                </form>
+            </li>
+            <li>
+                <form action="#" method="get">
+                    <button type="button" class="btn sidebar-menu-btn">Rašyti naują straipsnį</button>
+                </form>
+            </li>
+            <br>
+        </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="side-menu-header">
+                <h4>Vartotojai</h4>
+            </div>
+            <li>
+                <form action="#" method="get">
+                    <button type="button" class="btn sidebar-menu-btn">Valdyti vartotojus</button>
+                </form>
+            </li>
+        </div>
+    </ul>
+</div>
+
+</body>
+</html>

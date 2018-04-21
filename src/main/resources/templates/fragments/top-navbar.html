@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+
+    <div th:fragment="top-navbar">
+        <!-- Top navigation menu upper-->
+        <nav class="navbar fixed-top navbar-dark upper" id="top-nav-upper">
+            <a class="navbar-brand" href="/">Naujienų Portalas</a>
+        </nav>
+
+        <!-- Top navigation menu lower-->
+        <nav class="navbar fixed-top navbar-categories lower" id="top-nav-lower">
+            <div class="nav">
+
+                <button class="hamburger hamburger--slider" type="button" id="menu-toggle" sec:authorize="isAuthenticated()">
+                    <span class="hamburger-box"><span class="hamburger-inner"></span></span>
+                </button>
+                <a class="nav-item nav-link" href="#">Naujausios</a>
+                <a class="nav-item nav-link" href="#">Sportas</a>
+                <a class="nav-item nav-link" href="#">Verslas</a>
+                <a class="nav-item nav-link" href="#">Mokslas</a>
+                <a class="nav-item nav-link" href="#">Kultūra</a>
+                <a class="nav-item nav-link" href="#">Laisvalaikis</a>
+                <a class="nav-item nav-link" href="#">Kriminalai</a>
+                <a class="nav-item nav-link" href="#">Lietuva</a>
+                <a class="nav-item nav-link" href="#">Užsienis</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle no-separator" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Daugiau
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item no-separator" href="#">Auto</a>
+                        <a class="dropdown-item no-separator" href="#">Gyvenimas</a>
+                        <a class="dropdown-item no-separator" href="#">Sveikata</a>
+                        <a class="dropdown-item no-separator" href="#">Maistas</a>
+                        <a class="dropdown-item no-separator" href="#">Stilius</a>
+                        <a class="dropdown-item no-separator" href="#">Kelionės</a>
+
+                    </div>
+                </li>
+            </div>
+            <a href="/entry" sec:authorize="isAnonymous()" style="margin-right: 75px">Prisijungti</a>
+            <div class="dropdown" sec:authorize="isAuthenticated()" style="margin-right: 100px">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span sec:authentication="name"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item no-separator" th:href="@{/logout}">Atsijungti</a>
+                    <a class="dropdown-item no-separator"><span sec:authentication="principal.authorities"></span></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</body>
+</html>

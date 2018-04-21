@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"> <!-- Inserting head tag -->
+</head>
+<body>
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block> <!-- Inserting top navigation bar -->
+<div id="wrapper">
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block> <!-- Inserting side menu -->
+
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3 login-register-card">
+                <div class="card-body">
+                    <!-- Links of login and registration forms -->
+                    <div class="row ">
+                        <div class="col-md-6 text-center">
+                            <a id="login-form-link" href="#" class="card-link card-link-active">Prisijungti</a>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <a id="registration-form-link" href="#" class="card-link card-link-inactive">Registruotis</a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Login form -->
+                            <div th:replace="~{fragments/login-form :: login-form}"></div>
+                            <!-- Registration form -->
+                            <div th:replace="~{fragments/registration-form :: registration-form}"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="~{fragments/scripts :: scripts}"></div> <!-- Inserting javascript files -->
+<script src="js/login-registration.js"></script>
+
+<!-- Open registration form if variable 'registration-error' exists -->
+<script th:if="${registrationError != null}" >
+    switchToRegistrationForm();
+</script>
+
+</body>
+</html>
