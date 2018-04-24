@@ -10,7 +10,7 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
     /**
-     * Finds groups that the user with the specified username belengs to
+     * Finds groups that the user with the specified username belongs to
      */
     @Query("SELECT group FROM Group group WHERE group.id IN ("     +
            "SELECT groupUser.group.id FROM GroupUser groupUser "   +
