@@ -161,3 +161,12 @@ nav div a.nav-item::after {
     color: black;
     background-color: #999999;
 }
+
+
+
+/* =================================================================*/
+/* ==================== Invitations modal ==========================*/
+
+.modal-body p {
+    margin-top: 6px;
+}

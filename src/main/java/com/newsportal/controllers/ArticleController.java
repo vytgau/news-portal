@@ -12,6 +12,7 @@ public class ArticleController {
      */
     @GetMapping(value = "/")
     public String home(Model model) {
+
         return "home";
     }
 }

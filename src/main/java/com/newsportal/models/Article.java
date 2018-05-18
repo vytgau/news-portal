@@ -50,7 +50,7 @@ public class Article {
     private String title;
     private Integer rating;
     private Integer views;
-    //private String picture;
+    private String picture;
 
     public Article() {}
 

@@ -12,8 +12,14 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <!-- Inserting layout example -->
-            <div class="container-fluid" th:replace="~{fragments/main-articles-layout-example :: main-articles-layout-example}">
+            <div class="container-fluid">
+
+                <!-- Inserting layout example -->
+                <th:block th:insert="~{fragments/main-articles-layout-example :: main-articles-layout-example}"></th:block>
+
+                <!-- Inserting invitations modal -->
+                <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
             </div>
         </div>
 
