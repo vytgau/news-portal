@@ -11,4 +11,8 @@ public interface GroupService {
     List<Group> findGroupsUserBelongsToByUsername(String username);
 
     List<GroupInvitation> findNewInvitations(String username);
+
+    void declineInvitation(int id);
+
+    void acceptInvitation(int id);
 }

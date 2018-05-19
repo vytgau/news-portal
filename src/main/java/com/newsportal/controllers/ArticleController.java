@@ -11,8 +11,7 @@ public class ArticleController {
      * Opens homepage
      */
     @GetMapping(value = "/")
-    public String home(Model model) {
-
+    public String home() {
         return "home";
     }
 }
