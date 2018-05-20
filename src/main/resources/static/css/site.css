@@ -170,3 +170,21 @@ nav div a.nav-item::after {
 .modal-body p {
     margin-top: 6px;
 }
+
+#new-members-search-item:hover {
+    background-color: #e8e9ea;
+}
+
+#new-members-search-item a {
+    text-decoration: none;
+    color: black;
+}
+
+#group-members-search-item:hover {
+    background-color: #e8e9ea;
+}
+
+#group-members-search-item a {
+    text-decoration: none;
+    color: black;
+}

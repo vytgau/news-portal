@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="group-side-menu" id="sidebar-wrapper" sec:authorize="isAuthenticated()">
+    <ul class="sidebar-nav">
+        <div class="side-menu-header">
+            <h4 >Grupės valdymas</h4>
+        </div>
+        <li>
+            <form><button type="button" class="btn sidebar-menu-btn" th:onclick="'window.location.href=\'' + @{/group/members(groupid=${group.id})} + '\''">Grupės nariai</button></form>
+        </li>
+        <li th:if="${groupUser.role.name()} == 'WRITER' OR ${groupUser.role.name()} == 'ADMIN' ">
+            <button type="button" class="btn sidebar-menu-btn">Rašyti naują straipsnį</button>
+        </li>
+        <li th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}">
+            <button type="button" class="btn sidebar-menu-btn">Redaguoti grupę</button>
+        </li>
+        <li th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}">
+            <button type="button" class="btn sidebar-menu-btn">Ištrinti grupę</button>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

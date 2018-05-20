@@ -30,6 +30,11 @@ public class GroupServiceImpl implements GroupService {
     private GroupUserRepository groupUserRepository;
 
     @Override
+    public Group findById(long id) {
+        return groupRepository.findById(id).get();
+    }
+
+    @Override
     public List<Group> findGroupsUserBelongsToByUsername(String username) {
         return groupRepository.findGroupsUserBelongsToByUsername(username);
     }
@@ -48,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void acceptInvitation(int id) {
-        // change invotation state to accepted
+        // change invitation state to accepted
         GroupInvitation invitation = groupInvitationRepository.findById((long)id).get();
         invitation.setState(InvitationState.ACCEPTED);
         groupInvitationRepository.save(invitation);

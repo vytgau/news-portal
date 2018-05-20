@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- Bootstrap core CSS -->
+    <link href="../css/hamburgers.min.css" rel="stylesheet">   <!-- Side menu toggler button (hamburger icon) -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">   <!-- Sidebar css -->
+    <link href="../css/site.css" rel="stylesheet">             <!-- Site custom css -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="../js/jquery.min.js"></script>
+    <title th:text="${group.title}"></title>
+
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+    <!-- Inserting side menu -->
+    <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <h5 class="card-header text-center">Grupės nariai</h5>
+                        <div class="card-body">
+
+                            <div class="input-group col-8 offset-2">
+                                <input class="form-control py-2 border-right-0 border" type="search"
+                                       placeholder="Ieškoti grupės narių..." id="group-members-search">
+                                <span class="input-group-append">
+								<button class="btn btn-outline-secondary border-left-0 border" type="button">
+									<i class="fas fa-search"></i>
+								</button>
+							  </span>
+                            </div>
+
+                            <br>
+
+                            <div class="container border rounded py-2" id="group-members-search-container">
+
+                                <div class="row rounded mx-2 py-1 h-100" id="group-members-search-item"
+                                     th:each="member: ${groupMembers}">
+                                    <div class="col-10 my-auto">
+                                        <a href="#"
+                                           th:text="${member.getUser().getUsername()} + '(' + ${member.getUser().getFirstname()} + ' ' + ${member.getUser().getLastname()} + ')'">Username(Vardas,
+                                            Pavarde)</a>
+                                    </div>
+                                    <div class="col-2 ">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-6">
+                    <div class="card">
+                        <h5 class="card-header text-center">Naujo nario pakvietimas</h5>
+                        <div class="card-body">
+
+
+                            <div class="input-group col-8 offset-2">
+                                <input class="form-control py-2 border-right-0 border" type="search"
+                                       placeholder="Ieškoti vartotojų..." id="new-users-search">
+                                <span class="input-group-append">
+								<button class="btn btn-outline-secondary border-left-0 border" type="button">
+									<i class="fas fa-search"></i>
+								</button>
+							  </span>
+                            </div>
+
+                            <br>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/site.js"></script>
+</div>
+
+</body>
+</html>

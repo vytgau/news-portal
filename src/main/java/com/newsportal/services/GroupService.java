@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface GroupService {
 
+    Group findById(long id);
+
     List<Group> findGroupsUserBelongsToByUsername(String username);
 
     List<GroupInvitation> findNewInvitations(String username);
