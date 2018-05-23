@@ -4,9 +4,8 @@ import com.newsportal.models.Group;
 import com.newsportal.models.GroupInvitation;
 import com.newsportal.models.GroupUser;
 import com.newsportal.models.User;
-import com.newsportal.repositories.GroupUserRepository;
-import com.newsportal.repositories.UserRepository;
 import com.newsportal.services.GroupService;
+import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class GroupController {
@@ -27,17 +28,42 @@ public class GroupController {
     private UserService userService;
 
     @Autowired
-    private GroupUserRepository groupUserRepository;
+    private GroupUserService groupUserService;
+
+    @GetMapping("/search/group/members")
+    @ResponseBody
+    public List<GroupUser> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
+        List<GroupUser> temp = groupUserService.search(groupId, searchTerm);
+        return groupUserService.search(groupId, searchTerm);
+    }
+
+    @GetMapping("/group/member")
+    public String groupMember(@RequestParam String groupId, @RequestParam String groupMemberId, Model model, Principal principal) {
+
+        String username = principal.getName();
+
+        Group group = groupService.findById(Long.valueOf(groupId));
+        User user = userService.findByUsername(username);
+        GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+        List<GroupUser> groupMembers = groupUserService.findByGroupId(Long.valueOf(groupId));
+
+
+        model.addAttribute("group", group);
+        model.addAttribute("groupUser", groupUser);
+        model.addAttribute("groupMembers", groupMembers);
+
+        return "group-member";
+    }
 
     @GetMapping("group/members")
-    public String groupMembers(@RequestParam String groupid, Model model, Principal principal) {
+    public String groupMembersManagement(@RequestParam String groupid, Model model, Principal principal) {
 
         String username = principal.getName();
 
         Group group = groupService.findById(Long.valueOf(groupid));
         User user = userService.findByUsername(username);
-        GroupUser groupUser = groupUserRepository.findFirstByGroupIdAndUserId(group.getId(), user.getId());
-        List<GroupUser> groupMembers = groupUserRepository.findByGroupId(Long.valueOf(groupid));
+        GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+        List<GroupUser> groupMembers = groupUserService.findByGroupId(Long.valueOf(groupid));
 
 
         model.addAttribute("group", group);
@@ -57,7 +83,7 @@ public class GroupController {
 
         Group group = groupService.findById(Long.valueOf(id));
         User user = userService.findByUsername(username);
-        GroupUser groupUser = groupUserRepository.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+        GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
 
         model.addAttribute("group", group);
         model.addAttribute("groupUser", groupUser);
@@ -73,6 +99,16 @@ public class GroupController {
     public List<Group> getGroups(Principal principal) {
         String username = principal.getName();
         return groupService.findGroupsUserBelongsToByUsername(username);
+    }
+
+    @GetMapping("/current_group-user")
+    @ResponseBody
+    public GroupUser getCurrentGroupUser(@RequestParam String groupId, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        Group group = groupService.findById(Long.valueOf(groupId));
+
+        return groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
     }
 
     /**
@@ -96,5 +132,17 @@ public class GroupController {
     @ResponseStatus(value = HttpStatus.OK)
     public void declineInvitation(@RequestParam("id") String id) {
         groupService.declineInvitation(Integer.valueOf(id));
+    }
+
+    @RequestMapping(value = "/create_invitation", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void createInvitation(@RequestParam("userId") String userId, @RequestParam("groupId") String groupId) {
+        groupService.createInvitation(Long.valueOf(userId), Long.valueOf(groupId));
+    }
+
+    @RequestMapping(value = "/remove_group_user", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void removeGroupUser(@RequestParam("groupUserId") String groupUserId) {
+        groupService.removeGroupUser(Long.valueOf(groupUserId));
     }
 }

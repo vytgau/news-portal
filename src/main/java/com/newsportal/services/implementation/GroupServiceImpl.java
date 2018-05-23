@@ -9,6 +9,7 @@ import com.newsportal.repositories.GroupInvitationRepository;
 import com.newsportal.repositories.GroupRepository;
 import com.newsportal.repositories.GroupUserRepository;
 import com.newsportal.services.GroupService;
+import com.newsportal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private GroupUserRepository groupUserRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public Group findById(long id) {
@@ -65,5 +69,22 @@ public class GroupServiceImpl implements GroupService {
         groupUser.setUser(invitation.getUser());
         groupUser.setGroup(invitation.getGroup());
         groupUserRepository.save(groupUser);
+    }
+
+    @Override
+    public void createInvitation(long userId, long groupId) {
+        GroupInvitation invitation = new GroupInvitation();
+
+        invitation.setUser(userService.findById(userId));
+        invitation.setGroup(groupRepository.findById(groupId).get());
+        invitation.setDate(new Date());
+        invitation.setState(InvitationState.NEW);
+
+        groupInvitationRepository.save(invitation);
+    }
+
+    @Override
+    public void removeGroupUser(long groupUserId) {
+        groupUserRepository.deleteById(groupUserId);
     }
 }

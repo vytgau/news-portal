@@ -171,20 +171,20 @@ nav div a.nav-item::after {
     margin-top: 6px;
 }
 
-#new-members-search-item:hover {
+.new-members-search-item:hover {
     background-color: #e8e9ea;
 }
 
-#new-members-search-item a {
+.new-members-search-item a {
     text-decoration: none;
     color: black;
 }
 
-#group-members-search-item:hover {
+.group-members-search-item:hover {
     background-color: #e8e9ea;
 }
 
-#group-members-search-item a {
+.group-members-search-item a {
     text-decoration: none;
     color: black;
 }

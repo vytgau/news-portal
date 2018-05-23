@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+    <!-- Inserting side menu -->
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+
+            <!-- Inserting invitations modal -->
+            <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+        </div>
+    </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>

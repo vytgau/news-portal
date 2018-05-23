@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8"/>
 
+    <link href="../css/auto-complete.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- Bootstrap core CSS -->
     <link href="../css/hamburgers.min.css" rel="stylesheet">   <!-- Side menu toggler button (hamburger icon) -->
     <link href="../css/simple-sidebar.css" rel="stylesheet">   <!-- Sidebar css -->
@@ -35,7 +36,7 @@
                                 <input class="form-control py-2 border-right-0 border" type="search"
                                        placeholder="Ieškoti grupės narių..." id="group-members-search">
                                 <span class="input-group-append">
-								<button class="btn btn-outline-secondary border-left-0 border" type="button">
+								<button class="btn btn-outline-secondary border-left-0 border" type="button" id="group-members-search-btn">
 									<i class="fas fa-search"></i>
 								</button>
 							  </span>
@@ -45,15 +46,15 @@
 
                             <div class="container border rounded py-2" id="group-members-search-container">
 
-                                <div class="row rounded mx-2 py-1 h-100" id="group-members-search-item"
-                                     th:each="member: ${groupMembers}">
+                                <div class="row rounded mx-2 py-1 h-100 group-members-search-item" th:each="member: ${groupMembers}">
                                     <div class="col-10 my-auto">
-                                        <a href="#"
-                                           th:text="${member.getUser().getUsername()} + '(' + ${member.getUser().getFirstname()} + ' ' + ${member.getUser().getLastname()} + ')'">Username(Vardas,
+                                        <a th:href="@{member(groupid=${member.getGroup().getId()},groupMemberId=${member.getId()})}"
+                                           th:text="${member.getUser().getUsername()} + ' (' + ${member.getUser().getFirstname()} + ' ' + ${member.getUser().getLastname()} + ')'">Username(Vardas,
                                             Pavarde)</a>
                                     </div>
-                                    <div class="col-2 ">
-                                        <button class="btn btn-outline-secondary" type="button">
+                                    <div class="col-2 " th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}" th:switch="${groupUser.getUser().getUsername()}">
+                                        <span th:case="${member.getUser().getUsername()}"><i>you</i></span>
+                                        <button th:case="*" class="btn btn-outline-secondary" type="button" th:value="${member.getId()}">
                                             <i class="fas fa-minus"></i>
                                         </button>
                                     </div>
@@ -76,7 +77,7 @@
                                 <input class="form-control py-2 border-right-0 border" type="search"
                                        placeholder="Ieškoti vartotojų..." id="new-users-search">
                                 <span class="input-group-append">
-								<button class="btn btn-outline-secondary border-left-0 border" type="button">
+								<button class="btn btn-outline-secondary border-left-0 border" type="button" id="new-users-search-btn">
 									<i class="fas fa-search"></i>
 								</button>
 							  </span>
@@ -84,6 +85,9 @@
 
                             <br>
 
+                            <div class="container border rounded py-2" id="new-members-search-container">
+
+                            </div>
 
                         </div>
                     </div>
@@ -95,9 +99,221 @@
     </div>
 </div>
 
+</div>
+
+<script src="../js/auto-complete.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/site.js"></script>
-</div>
+
+<script>
+    var url = new URL(window.location.href);
+    var gId = url.searchParams.get("groupid");
+
+    new autoComplete({
+        selector: '#group-members-search',
+        minChars: 1,
+        source: function(term, response){
+            $.getJSON('/search/group/members', { groupId: gId, searchTerm: term}, function(data){
+                var result = [];
+                $.each(data, function (index, value) {
+                    var username = value.user.username;
+
+                    result.push(username);
+                });
+                response(result);
+            });
+        },
+        onSelect: function(e, term, item){
+            searchGroupMembers(term);
+        }
+    });
+
+    new autoComplete({
+        selector: '#new-users-search',
+        minChars: 1,
+        source: function(term, response){
+            $.getJSON('/search/users', { searchTerm: term, groupId: gId }, function(data){
+                var result = [];
+
+                $.each(data, function (index, value) {
+                    var username = value.user.username;
+
+                    result.push(username);
+                });
+                response(result);
+            });
+        },
+        onSelect: function(e, term, item){
+            searchUsers(term);
+        }
+    });
+
+    // assign event when enter key is pressed in the group members search box
+    $('#group-members-search').keypress(function (event) {
+        // check if enter key was pressed
+        if (event.which == 13) {
+            $('#group-members-search-btn').click();
+            return false;
+        }
+    });
+
+    // assign event to group members search button
+    $('#group-members-search-btn').click(function () {
+        var searchTerm = $('#group-members-search').val();
+        searchGroupMembers(searchTerm);
+    });
+
+    function searchGroupMembers(searchTerm) {
+        var url = new URL(window.location.href);
+        var groupId = url.searchParams.get("groupid");
+        var currentUser = {};
+        var currentGroupUser = {};
+
+        $.getJSON('/current_group-user', { groupId: groupId }, function(result){
+            currentGroupUser = result;
+            // search for group members
+            $.getJSON('/search/group/members', { groupId: groupId, searchTerm: searchTerm}, function(groupMembers){
+
+                // get current logged in user
+                $.getJSON('/users/current', function(data){
+                    $( "#group-members-search-container" ).empty();
+                    currentUser = data;
+
+                    $.each(groupMembers, function (index, value) {
+                        var username = value.user.username;
+                        var firstname = value.user.firstname;
+                        var lastname = value.user.lastname;
+
+                        var item = '<div class="row rounded mx-2 py-1 h-100 group-members-search-item">';
+                        item = item.concat('<div class="col-10 my-auto">');
+                        item = item.concat('<a href="member?groupId=' + value.group.id + '&groupMemberId=' + value.id + '">');
+                        item = item.concat(username + '(<i>' + firstname + ', ' + lastname + ')');
+                        item = item.concat('</a>');
+                        item = item.concat('</div>');
+                        item = item.concat('<div class="col-2 ">');
+                        if (currentGroupUser.role == 'ADMIN') {
+                            if (value.user.username == currentUser.username) {
+                                item = item.concat('<span><i>you</i></span>');
+                            } else {
+                                item = item.concat('<button class="btn btn-outline-secondary" type="button" value="' + value.id + '">');
+                                item = item.concat('<i class="fas fa-minus"></i>');
+                                item = item.concat('</button>');
+                            }
+                        }
+                        item = item.concat('</div>');
+                        item = item.concat('</div>');
+
+                        $( "#group-members-search-container" ).append(item);
+                    });
+                });
+            });
+        });
+    }
+
+    // assign event when enter key is pressed in the new users search box
+    $('#new-users-search').keypress(function (event) {
+        // check if enter key was pressed
+        if (event.which == 13) {
+            $('#new-users-search-btn').click();
+            return false;
+        }
+    });
+
+    // assign event to group members search button
+    $('#new-users-search-btn').click(function () {
+        var searchTerm = $('#new-users-search').val();
+        searchUsers(searchTerm);
+    });
+
+    function searchUsers(searchTerm) {
+        var url = new URL(window.location.href);
+        var groupId = url.searchParams.get("groupid");
+
+        $.getJSON('/search/users', { searchTerm: searchTerm, groupId: groupId }, function(data){
+            $('#new-members-search-container').empty();
+
+            $.each(data, function (index, value) {
+                var username = value.user.username;
+                var firstname = value.user.firstname;
+                var lastname = value.user.lastname;
+
+                var item = '<div class="row rounded mx-2 py-1 h-100 new-members-search-item">';
+                item = item.concat('<div class="col-9 my-auto">');
+                item = item.concat('<a href="/users?userId=' + value.user.id + '">');
+                item = item.concat(username + '(<i>' + firstname + ', ' + lastname + ')');
+                item = item.concat('</a>');
+                item = item.concat('</div>');
+                item = item.concat('<div class="col-3">');
+                if (value.state == 'YOU') {
+                    item = item.concat('<span><i>you<i></span>');
+                } else if (value.state == 'MEMBER') {
+                    item = item.concat('<span><i>Jau narys<i></span>');
+                } else if (value.state == 'INVITED') {
+                    item = item.concat('<span><i>Pakviestas<i></span>');
+                } else if (value.state == 'NOTINVITED') {
+                    item = item.concat('<button class="btn btn-outline-secondary" type="button" value="' + value.user.id + '">');
+                    item = item.concat('<i class="fas fa-plus"></i>');
+                    item = item.concat('</button>');
+                }
+
+                item = item.concat('</div>');
+                item = item.concat('</div>');
+
+                $( "#new-members-search-container" ).append(item);
+            });
+        });
+    }
+
+    $('#new-members-search-container').on('click','button',function(event){
+        if ($(event.target).is("i")){
+            var element = $(event.target.parentElement);
+            var value = element.val();
+            sendInvitation(value, element);
+        } else {
+            var element = $(event.target);
+            var value = element.val();
+            sendInvitation(value, element);
+        }
+    });
+    
+    function sendInvitation(userId, element) {
+        var url = new URL(window.location.href);
+        var groupId = url.searchParams.get("groupid");
+
+        $.ajax({
+            type: "POST",
+            url: "/create_invitation",
+            data: { userId: userId, groupId: groupId},
+            success: function() {
+                element.replaceWith('<span><i>Pakviestas</i></span>');
+            }
+        });
+    }
+
+    $('#group-members-search-container').on('click','button',function(event){
+        if ($(event.target).is("i")){
+            var element = $(event.target.parentElement);
+            var value = element.val();
+            removeGroupMember(value, element);
+        } else {
+            var element = $(event.target);
+            var value = element.val();
+            removeGroupMember(value, element);
+        }
+    });
+
+    function removeGroupMember(groupUserId, element) {
+        $.ajax({
+            type: "POST",
+            url: "/remove_group_user",
+            data: { groupUserId: groupUserId },
+            success: function() {
+                (element.parentElement.parentElement.parentElement).fadeOut(300, function() { $(this).remove(); });
+            }
+        });
+    }
+
+</script>
 
 </body>
 </html>

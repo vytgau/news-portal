@@ -17,4 +17,8 @@ public interface GroupService {
     void declineInvitation(int id);
 
     void acceptInvitation(int id);
+
+    void createInvitation(long userId, long groupId);
+
+    void removeGroupUser(long groupUserId);
 }

@@ -34,7 +34,7 @@ function showNewInvitations() {
                     $( "#invitation-" + invitationId ).append( "<div class=\"col-sm-2\"><button id=\"decline-" + invitationId + "\" type=\"button\" class=\"btn btn-danger\"  aria-label=\"Left Align\"><i class=\"fas fa-times\"></i></button></div>" );
                 });
             } else {
-                $( "#invitations-modal-div" ).append("<h4>Pakvietimu nera</h4>");
+                $( "#invitations-modal-div" ).append("<h4>Pakvietimų nera</h4>");
             }
 
             $("#invitations-modal-btn-hidden").click();
@@ -51,10 +51,12 @@ $('#invitations-modal-div').on('click','button',function(event){
 })
 
 function handleInvitationClicks(id) {
-    if (id.slice(0, -2) == "accept") {
-        acceptInvitation(id.slice(-1));
+    var invitationId = id.substring(id.indexOf('-') + 1);
+    alert(invitationId);
+    if (id.substring(0, id.indexOf("-")) == "accept") {
+        acceptInvitation(invitationId);
     } else {
-        declineInvitation(id.slice(-1));
+        declineInvitation(invitationId);
     }
 }
 
