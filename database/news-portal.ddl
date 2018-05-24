@@ -103,14 +103,14 @@ CREATE TABLE Users
 
 CREATE TABLE Articles
 (
-	text varchar (255),
+	text mediumtext,
 	title varchar (255),
 	creation_date datetime,
 	edit_date datetime,
 	rating integer,
 	views integer,
 	publication_time datetime,
-	picture varchar (255),
+	picture mediumblob,
 	id bigint,
 	fk_Usersid bigint NOT NULL,
 	PRIMARY KEY(id),

@@ -14,29 +14,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class GroupController {
 
-    @Autowired
-    private GroupService groupService;
+    @Autowired private GroupService groupService;
+    @Autowired private UserService userService;
+    @Autowired private GroupUserService groupUserService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private GroupUserService groupUserService;
-
-    @GetMapping("/search/group/members")
-    @ResponseBody
-    public List<GroupUser> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
-        List<GroupUser> temp = groupUserService.search(groupId, searchTerm);
-        return groupUserService.search(groupId, searchTerm);
-    }
-
+    /**
+     * Opens group member information page
+     */
     @GetMapping("/group/member")
     public String groupMember(@RequestParam String groupId, @RequestParam String groupMemberId, Model model, Principal principal) {
 
@@ -55,6 +44,9 @@ public class GroupController {
         return "group-member";
     }
 
+    /**
+     * Opens group members management page
+     */
     @GetMapping("group/members")
     public String groupMembersManagement(@RequestParam String groupid, Model model, Principal principal) {
 
@@ -91,8 +83,20 @@ public class GroupController {
         return "group";
     }
 
+
+    /*********************************************************
+     * =====================    REST API =====================
+     *********************************************************/
+
+    @GetMapping("/search/group/members")
+    @ResponseBody
+    public List<GroupUser> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
+        List<GroupUser> temp = groupUserService.search(groupId, searchTerm);
+        return groupUserService.search(groupId, searchTerm);
+    }
+
     /**
-     * Restful endpoint for getting a list of groups that the authenticated user belongs to
+     * Finds a list of groups that the authenticated user belongs to
      */
     @GetMapping("/get/groups")
     @ResponseBody
@@ -100,6 +104,7 @@ public class GroupController {
         String username = principal.getName();
         return groupService.findGroupsUserBelongsToByUsername(username);
     }
+
 
     @GetMapping("/current_group-user")
     @ResponseBody

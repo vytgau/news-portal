@@ -46,11 +46,19 @@ public class Article {
     )
     private Set<Group> groups;
 
+    @Lob
+    @Column(columnDefinition="mediumtext")
+    @Basic(fetch = FetchType.LAZY)
     private String text;
+
     private String title;
     private Integer rating;
     private Integer views;
-    private String picture;
+
+    @Lob
+    @Column(columnDefinition="mediumblob")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] picture;
 
     public Article() {}
 
