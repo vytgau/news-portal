@@ -60,6 +60,10 @@ public class Article {
     @Basic(fetch = FetchType.LAZY)
     private byte[] picture;
 
+    // shows if this article belongs to main group
+    @Column(name = "in_main_group")
+    private boolean inMainGroup;
+
     public Article() {}
 
     public Long getId() {
@@ -145,4 +149,20 @@ public class Article {
     public Set<Group> getGroups() { return groups; }
 
     public void setGroups(Set<Group> groups) { this.groups = groups; }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    public boolean isInMainGroup() {
+        return inMainGroup;
+    }
+
+    public void setInMainGroup(boolean inMainGroup) {
+        this.inMainGroup = inMainGroup;
+    }
 }

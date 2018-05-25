@@ -103,6 +103,7 @@ CREATE TABLE Users
 
 CREATE TABLE Articles
 (
+	in_main_group boolean,
 	text mediumtext,
 	title varchar (255),
 	creation_date datetime,

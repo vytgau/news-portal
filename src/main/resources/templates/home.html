@@ -14,8 +14,18 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
 
-                <!-- Inserting layout example -->
-                <th:block th:insert="~{fragments/main-articles-layout-example :: main-articles-layout-example}"></th:block>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 imgBox">
+                        <div class="thumbnail">
+                            <a href="#" class="article-thumbnail-link">
+                                <img src="/image?articleId=17" alt="alt text" class="img-thumbnail rounded"  width="430" height="260">
+                                <div class="caption">
+                                    <h5>Straipsnio pavadinimas</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Inserting invitations modal -->
                 <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
