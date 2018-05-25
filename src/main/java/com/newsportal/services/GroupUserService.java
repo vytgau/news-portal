@@ -8,10 +8,12 @@ public interface GroupUserService {
 
     List<GroupUser> findByGroupId(long id);
 
-    List<GroupUser> findAllByGroupId(long id);
+    List<GroupUser> findByUserId(long userId);
 
     GroupUser findFirstByGroupIdAndUserId(long groupId, long userId);
 
     List<GroupUser> search(String groupId, String searchTerm);
+
+    List<GroupUser> findGroupUsersWithPublishRights(List<GroupUser> groupUsers);
 
 }

@@ -11,6 +11,8 @@ public interface GroupUserRepository extends JpaRepository<GroupUser, Long> {
 
     List<GroupUser> findByGroupId(long id);
 
+    List<GroupUser> findByUserId(long userId);
+
     GroupUser findFirstByGroupIdAndUserId(long groupId, long userId);
 
     @Query("SELECT groupUser FROM GroupUser groupUser " +

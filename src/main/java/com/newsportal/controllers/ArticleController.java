@@ -14,4 +14,9 @@ public class ArticleController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/create/article")
+    public String openArticleCreationView() {
+        return "create-article";
+    }
 }

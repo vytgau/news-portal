@@ -16,7 +16,7 @@
             <form><button type="button" class="btn sidebar-menu-btn" th:onclick="'window.location.href=\'' + @{/group/members(groupid=${group.id})} + '\''">Grupės nariai</button></form>
         </li>
         <li th:if="${groupUser.role.name()} == 'WRITER' OR ${groupUser.role.name()} == 'ADMIN' ">
-            <button type="button" class="btn sidebar-menu-btn">Rašyti naują straipsnį</button>
+            <button type="button" class="btn sidebar-menu-btn" th:onclick="'window.location.href=\'' + @{/create/article(fromGroup=${group.id})} + '\''">Rašyti naują straipsnį</button>
         </li>
         <li th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}">
             <button type="button" class="btn sidebar-menu-btn">Redaguoti grupę</button>

@@ -108,3 +108,11 @@ function refreshGroups() {
     );
 }
 
+$('#show-groups-btn').click(function(){
+    $("#groups-div").fadeToggle();
+});
+
+$("#upload-file-btn").click(function () {
+    $("#articlePicture").trigger('click');
+});
+

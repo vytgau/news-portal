@@ -21,7 +21,7 @@
                             var id = group.id;
                             var title = group.title;
 
-                            items.push("<li><a href=\group?id=" + id + ">" + title + "</a></li>");
+                            items.push("<li><a href='/group?id=" + id + "'>" + title + "</a></li>");
                         });
 
                         if (items.length > 0) {
@@ -43,7 +43,7 @@
         </li>
         <br>
 
-        <div sec:authorize="hasAnyRole('ROLE_WRITER','ROLE_ADMIN')">
+        <div>
             <div class="side-menu-header">
                 <h4>Mano Straipsniai</h4>
             </div>
@@ -52,10 +52,8 @@
                     <button type="button" class="btn sidebar-menu-btn">Peržiūrėti straipsnius</button>
                 </form>
             </li>
-            <li>
-                <form action="#" method="get">
-                    <button type="button" class="btn sidebar-menu-btn">Rašyti naują straipsnį</button>
-                </form>
+            <li sec:authorize="hasAnyRole('ROLE_WRITER','ROLE_ADMIN')">
+                <button type="button" class="btn sidebar-menu-btn" onclick="window.location.href='/create/article?fromhome=true'">Rašyti naują straipsnį</button>
             </li>
             <br>
         </div>

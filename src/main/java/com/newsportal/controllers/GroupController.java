@@ -4,6 +4,7 @@ import com.newsportal.models.Group;
 import com.newsportal.models.GroupInvitation;
 import com.newsportal.models.GroupUser;
 import com.newsportal.models.User;
+import com.newsportal.models.enums.Role;
 import com.newsportal.services.GroupService;
 import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class GroupController {
@@ -93,6 +96,27 @@ public class GroupController {
     public List<GroupUser> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
         List<GroupUser> temp = groupUserService.search(groupId, searchTerm);
         return groupUserService.search(groupId, searchTerm);
+    }
+
+    /**
+     * Get group titles and id's that the user who is currently logged in has publish rights to
+     */
+    @GetMapping("/get/groups/publish_rights")
+    @ResponseBody
+    public List<GroupUser> getGroupsUserCanPublishArticlesTo(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        List<GroupUser> groupUserRecords = groupUserService.findByUserId(user.getId());
+        return groupUserService.findGroupUsersWithPublishRights(groupUserRecords);
+    }
+
+    /**
+     * Check if currently logged in user has publish rights to the main group
+     */
+    @GetMapping("/publish_to_main_group")
+    @ResponseBody
+    public boolean canPublishToMainGroup(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return user.getRole() != Role.REGULAR ? true : false;
     }
 
     /**

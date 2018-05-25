@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- Bootstrap core CSS -->
+    <link href="../css/hamburgers.min.css" rel="stylesheet">   <!-- Side menu toggler button (hamburger icon) -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">   <!-- Sidebar css -->
+    <link href="../css/site.css" rel="stylesheet">             <!-- Site custom css -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/css/tempusdominus-bootstrap-4.min.css" />
+    <script src="../js/jquery.min.js"></script>
+    <title>Straipsnio kūrimas</title>
+
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-8 offset-2">
+                    <div class="card">
+                        <h2 class="card-header text-center">Straipsnio kūrimas</h2>
+                        <div class="card-body">
+                            <form>
+                                <div class="row form-group">
+                                    <label for="articleTitle" class="col-3 col-form-label"><i>Straipsnio pavadinimas:</i></label>
+                                    <div class="col-9">
+                                        <input type="text" class="form-control" id="articleTitle" placeholder="Straipsnio pavadinimas"></input>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="articlePicture" class="col-3 col-form-label"><i>Paveikslėlis:</i></label>
+                                    <div class="col-9">
+                                        <button type="button" class="btn btn-secondary" id="upload-file-btn">Pasirinkti failą</button>
+                                        <input type="file" class="form-control-file" id="articlePicture" text="Pasirinkti failą" style="display:none">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-3 col-form-label"><i>Publikavimo laikas:</i></label>
+                                    <div class="input-group date col-4" id="publishing-time" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#publishing-time"/>
+                                        <div class="input-group-append" data-target="#publishing-time" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-9 offset-3">
+                                        <button type="button" class="btn btn-secondary" id="show-groups-btn">Pasirinkti grupes</button>
+                                    </div>
+                                </div>
+                                <div class="row form-group" id="groups-div" style="display: none;">
+                                    <div class="col-6 offset-3" id="groups-checkbox-list">
+                                    </div>
+                                        <script>
+                                            var url = new URL(window.location.href);
+                                            var fromhome = url.searchParams.get("fromhome");
+                                            var fromGroup = url.searchParams.get("fromGroup");
+                                            var canPublishToMainGroup;
+
+                                            // check if user has rights to publish articles to main group
+                                            $.ajax({
+                                                type: 'GET',
+                                                url: "/publish_to_main_group",
+                                                async:false,
+                                                success:function(data){
+                                                    canPublishToMainGroup = data;
+                                                }
+                                            });
+
+                                            // get a list of groups that a user has publish rights to
+                                            $.ajax({
+                                                type: 'GET',
+                                                url: "/get/groups/publish_rights",
+                                                success:function(data){
+                                                    var items = [];
+                                                    if (canPublishToMainGroup == true) {
+                                                        items.push("<div class=\"form-check\"><label>");
+                                                        if (fromhome != null) {
+                                                            items.push("<input type=\"checkbox\" name=\"check\" value='' checked> <span class=\"label-text\">Pagrindinė</span>");
+                                                        } else {
+                                                            items.push("<input type=\"checkbox\" name=\"check\" value=''> <span class=\"label-text\">Pagrindinė</span>");
+                                                        }
+                                                        items.push("</label></div>");
+                                                    }
+
+                                                    $.each(data, function (index, groupUser) {
+                                                        items.push("<div class=\"form-check\"><label>");
+                                                        if (fromGroup != null && fromGroup == groupUser.group.id) {
+                                                            items.push("<input type=\"checkbox\" name=\"check\" value=\"" + groupUser.group.id + "\" checked> <span class=\"label-text\">" + groupUser.group.title + "</span>");
+                                                        } else {
+                                                            items.push("<input type=\"checkbox\" name=\"check\" value=\"" + groupUser.group.id + "\"> <span class=\"label-text\">" + groupUser.group.title + "</span>");
+                                                        }
+                                                        items.push("</label></div>");
+                                                    });
+
+                                                    $("#groups-checkbox-list").append(items.join(""));
+                                                }
+                                            });
+                                        </script>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-12">
+                                        <label for="article-text-area"><i>Straipsnio tekstas:</i></label>
+                                        <textarea class="form-control" id="article-text-area" rows="8"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-success btn-block" id="article-creation-btn">Išsaugoti</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inserting invitations modal -->
+            <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+        </div>
+    </div>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/site.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <script>
+        $(function () {$('#publishing-time').datetimepicker({
+            icons: {
+                time: "fas fa-clock"
+            },
+            widgetPositioning: {
+                horizontal: 'auto',
+                vertical: 'bottom'
+            }
+        });
+        });
+    </script>
+
+</div>
+
+</body>
+</html>
