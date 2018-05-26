@@ -22,6 +22,12 @@
         <div class="container-fluid">
 
             <div class="row">
+                <div class="alert alert-success fade show" role="alert" id="report-success-alert">
+                    <span>Pranešimas apie klaidą sukurtas</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
                 <div class="col-12">
                     <h2><span th:text="${article.getTitle()}">Straipsnio pavadinimas</span> &emsp;
                         <i id="like-btn" class="fas fa-thumbs-up"></i>&nbsp;&nbsp;
@@ -38,7 +44,8 @@
                     <span th:text="${article.getAuthor().getLastname()}">Pavardenis</span>
                 </div>
                 <div class="col-2">
-                    <button type="button" class="btn btn-warning float-right">Klaida&nbsp;&nbsp;<i class="fas fa-exclamation-triangle"></i></button>
+                    <button type="button" class="btn btn-warning float-right" id="report-modal-btn">Klaida&nbsp;&nbsp;<i
+                            class="fas fa-exclamation-triangle"></i></button>
                 </div>
             </div>
             <div class="row">
@@ -50,7 +57,8 @@
             <br>
             <div class="row">
                 <div class="col-12">
-                    <img th:src="@{/image(articleId=${article.getId()})}" alt="article thumbnail" class="img-thumbnail" width="50%">
+                    <img th:src="@{/image(articleId=${article.getId()})}" alt="article thumbnail" class="img-thumbnail"
+                         width="50%">
                 </div>
             </div>
             <br>
@@ -69,7 +77,8 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <textarea class="form-control" id="comment-textarea" rows="3" placeholder="Jūsų komentaras"></textarea>
+                            <textarea class="form-control" id="comment-textarea" rows="3"
+                                      placeholder="Jūsų komentaras"></textarea>
                         </div>
                     </div>
                 </div>
@@ -99,7 +108,48 @@
                 </div>
             </div>
 
-            <th:block th:if="${inGroup == null}" th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+            <th:block th:if="${inGroup == null}"
+                      th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+            <div class="modal" id="report-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title text-center">Pranešti apie klaidą</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div id="report-modal-div" class="container">
+
+                                    <div class="row form-group">
+                                        <div class="col-12">
+                                            <textarea class="form-control" id="article-text-area" rows="5"
+                                                      placeholder="Komentaras apie klaidą"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 offset-4">
+                                            <button type="button" class="btn btn-success btn-block" id="report-btn">
+                                                Pranešti
+                                            </button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer" id="report-error-alert">
+                            <div class="alert alert-danger " role="alert">
+                                <span>Komentaras apie klaidą negali būti tuščias/viršyti 255 simbolių</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <button type="button" data-toggle="modal" data-target="#report-modal" id="report-modal-btn-hidden"
+                        style="visibility: hidden;"></button>
+            </div>
 
         </div>
     </div>
@@ -107,6 +157,40 @@
     <!-- Inserting javascript files -->
     <div th:replace="~{fragments/scripts :: scripts}"></div>
 </div>
+
+<script>
+
+    $("#report-modal-btn").click(function () {
+        $("#report-modal-btn-hidden").click();
+    });
+
+    $("#report-btn").click(function () {
+        var url = new URL(window.location.href);
+        var articleId = url.searchParams.get("articleId");
+        var reportText = $('#article-text-area').val();
+
+        if (reportText != "" && reportText.length < 255) {
+            $.ajax({
+                type: "POST",
+                url: "/article/report",
+                data: {articleId: articleId, reportText: reportText},
+                success: function () {
+                    $("#report-success-alert").fadeTo(2000, 500).slideUp(500);
+                }
+            });
+
+            $("#report-modal-btn-hidden").click();
+        } else {
+            $("#report-error-alert").fadeTo(2000, 500);
+        }
+    });
+
+    $(document).ready (function(){
+        $("#report-success-alert").hide();
+        $("#report-error-alert").hide();
+    });
+
+</script>
 
 </body>
 </html>

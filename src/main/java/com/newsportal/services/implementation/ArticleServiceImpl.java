@@ -1,11 +1,11 @@
 package com.newsportal.services.implementation;
 
-import com.newsportal.models.Article;
-import com.newsportal.models.Comment;
-import com.newsportal.models.Group;
-import com.newsportal.models.User;
+import com.newsportal.models.*;
+import com.newsportal.models.enums.ReportState;
 import com.newsportal.repositories.ArticleRepository;
 import com.newsportal.repositories.CommentRepository;
+import com.newsportal.repositories.NotificationRepository;
+import com.newsportal.repositories.ReportRepository;
 import com.newsportal.services.ArticleService;
 import com.newsportal.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     private static final int ARTICLES_PER_PAGE = 8;
 
-    @Autowired
-    private ArticleRepository articleRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
-    private GroupService groupService;
+    @Autowired private ArticleRepository articleRepository;
+    @Autowired private CommentRepository commentRepository;
+    @Autowired private NotificationRepository notificationRepository;
+    @Autowired private ReportRepository reportRepository;
+    @Autowired private GroupService groupService;
 
     @Override
     public Article findById(long articleId) {
@@ -96,6 +93,27 @@ public class ArticleServiceImpl implements ArticleService {
         article.setGroups(groupSet);
 
         articleRepository.save(article);
+    }
+
+    @Override
+    public void createReport(Article article, String reportText) {
+        Report report = new Report();
+        Notification notification = new Notification();
+
+        report.setDate(new Date());
+        report.setState(ReportState.CREATED);
+        report.setArticle(article);
+        report.setComment(reportText);
+
+
+        notification.setDate(new Date());
+        notification.setArticle(article);
+        notification.setUser(article.getAuthor());
+        notification.setIsread(false);
+        notification.setDescription("Pranešimas apie klaidą");
+
+        reportRepository.save(report);
+        notificationRepository.save(notification);
     }
 
     /**

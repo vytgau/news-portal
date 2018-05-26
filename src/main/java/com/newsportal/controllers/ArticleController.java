@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -90,6 +91,14 @@ public class ArticleController {
         User author = userService.findByUsername(principal.getName());
         articleService.createArticle(articlePicture, articleTitle, publishTime, groups, articleText, author);
         return new RedirectView("/");
+    }
+
+    @PostMapping("/article/report")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void createReport(@RequestParam(value = "articleId", required = false) String articleId,
+                             @RequestParam(value = "reportText", required = false) String reportText) {
+        Article article = articleService.findById(Long.valueOf(articleId));
+        articleService.createReport(article, reportText);
     }
 
     /**
