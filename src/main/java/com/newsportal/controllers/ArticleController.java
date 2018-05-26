@@ -1,21 +1,23 @@
 package com.newsportal.controllers;
 
+import com.newsportal.models.Article;
 import com.newsportal.models.User;
 import com.newsportal.services.ArticleService;
 import com.newsportal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -31,7 +33,9 @@ public class ArticleController {
      * Opens homepage
      */
     @GetMapping(value = "/")
-    public String home() {
+    public String home(@RequestParam(name = "p", defaultValue = "0") int pageNumber, Model model) {
+        Page<Article> page = articleService.findArticlesHomePage(pageNumber);
+        model.addAttribute("page", page);
         return "home";
     }
 

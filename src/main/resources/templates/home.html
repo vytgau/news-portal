@@ -4,38 +4,51 @@
 <head th:replace="~{fragments/header :: header}">
 </head>
 <body>
-    <!-- Inserting top navigation bar -->
-    <th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
-    <div id="wrapper">
-        <!-- Inserting side menu -->
-        <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+    <!-- Inserting side menu -->
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
 
+            <div th:each="rowNo : ${#numbers.sequence( 0, 15, 4)}" th:if="${rowNo < page.getContent().size()}">
                 <div class="row">
-                    <div class="col-sm-6 col-md-4 imgBox">
+                    <div th:each="itemNo : ${#numbers.sequence( rowNo, rowNo + 3, 1)}" class="col-sm-6 col-md-3 imgBox"
+                         th:if="${itemNo < page.getContent().size()}">
                         <div class="thumbnail">
                             <a href="#" class="article-thumbnail-link">
-                                <img src="/image?articleId=17" alt="alt text" class="img-thumbnail rounded"  width="430" height="260">
+                                <img th:src="@{/image(articleId=${page.getContent().get(itemNo).getId()})}"
+                                     alt="alt text" class="img-thumbnail rounded" width="430" height="260">
                                 <div class="caption">
-                                    <h5>Straipsnio pavadinimas</h5>
+                                    <h5 th:text="${page.getContent().get(itemNo).getTitle()}">Straipsnio pavadinimas</h5>
                                 </div>
                             </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Inserting invitations modal -->
-                <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
-
+                <br><br>
             </div>
-        </div>
 
-        <!-- Inserting javascript files -->
-        <div th:replace="~{fragments/scripts :: scripts}"></div>
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item" th:if="${page.hasPrevious()}">
+                    <a class="page-link" th:href="@{/(p=${page.getNumber() - 1})}"><< Ankstesnis</a>
+                </li>
+                <li class="page-item" th:if="${page.hasNext()}">
+                    <a class="page-link" th:href="@{/(p=${page.getNumber() + 1})}">Sekantis >></a>
+                </li>
+            </ul>
+
+            <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+        </div>
     </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
 
 </body>
 </html>

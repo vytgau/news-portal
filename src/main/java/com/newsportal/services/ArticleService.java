@@ -9,9 +9,7 @@ public interface ArticleService {
 
     Article findById(long articleId);
 
-    Page<Article> findArticlesForGuest();
-
-    Page<Article> findArticlesForAuthenticatedUser();
+    Page<Article> findArticlesHomePage(int pageNumber);
 
     void createArticle(MultipartFile articlePicture, String articleTitle, String publishTime, String[] groups, String articleText, User author);
 
