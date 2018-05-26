@@ -27,6 +27,7 @@ import java.util.Set;
 public class ArticleServiceImpl implements ArticleService {
 
     private static final int ARTICLES_PER_PAGE = 8;
+    private static final int ARTICLES_PER_SEARCH_PAGE = 8;
 
     @Autowired private ArticleRepository articleRepository;
     @Autowired private CommentRepository commentRepository;
@@ -55,6 +56,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Comment> findArticleComments(Long articleId) {
         return commentRepository.findByArticleIdOrderByCreationDateDesc(articleId);
+    }
+
+    @Override
+    public Page<Article> searchArticles(int pageNumber, String searchText) {
+        Pageable pageable = getPageableSearch(pageNumber);
+        return articleRepository.searchArticles(searchText, pageable);
     }
 
     @Override
@@ -132,5 +139,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     private Pageable getPageable(int pageNumber) {
         return PageRequest.of(pageNumber, ARTICLES_PER_PAGE);
+    }
+
+    private Pageable getPageableSearch(int pageNumber) {
+        return PageRequest.of(pageNumber, ARTICLES_PER_SEARCH_PAGE);
     }
 }

@@ -17,6 +17,8 @@ public interface ArticleService {
 
     Page<Article> findArticlesGroup(int pageNumber, Group group);
 
+    Page<Article> searchArticles(int pageNumber, String searchText);
+
     void createArticle(MultipartFile articlePicture, String articleTitle, String publishTime, String[] groups, String articleText, User author);
 
     void createReport(Article article, String reportText);

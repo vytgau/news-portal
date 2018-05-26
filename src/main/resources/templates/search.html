@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- Bootstrap core CSS -->
+    <link href="../css/hamburgers.min.css" rel="stylesheet">   <!-- Side menu toggler button (hamburger icon) -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">   <!-- Sidebar css -->
+    <link href="../css/site.css" rel="stylesheet">             <!-- Site custom css -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="../js/jquery.min.js"></script>
+    <title>Paieška</title>
+</head>
+
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+    <!-- Inserting side menu -->
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+
+            <form action="/search/articles" method="get">
+                <div class="row">
+                    <div class="input-group col-8 offset-2">
+                        <input class="form-control py-2 border-right-0 border" name="searchText" type="search" placeholder="Ieškoti straipsnių..." id="article-search">
+                        <span class="input-group-append">
+						<button class="btn btn-outline-secondary border-left-0 border" type="submit">
+							<i class="fas fa-search"></i>
+						</button>
+						</span>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <th:block th:each="article : ${page.getContent()}">
+                <div class="row article-search-item">
+                    <div class="row">
+                        <div class="col-9">
+                            <a th:href="@{/article(articleId=${article.getId()})}"><h4 th:text="${article.getTitle()}">Straipsnio pavadinimas</h4></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">
+                            <p th:text="${#strings.abbreviate(article.getText(),200)}"></p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </th:block>
+            <br>
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item" th:if="${page.hasPrevious()}">
+                    <a class="page-link" th:href="@{/search/articles(p=${page.getNumber() - 1}, searchText=${searchText})}"><< Ankstesnis</a>
+                </li>
+                <li class="page-item" th:if="${page.hasNext()}">
+                    <a class="page-link" th:href="@{/search/articles(p=${page.getNumber() + 1}, searchText=${searchText})}">Sekantis >></a>
+                </li>
+            </ul>
+
+            <th:block th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+        </div>
+    </div>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/site.js"></script>
+</div>
+
+</body>
+</html>

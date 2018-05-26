@@ -95,8 +95,8 @@ public class ArticleController {
 
     @PostMapping("/article/report")
     @ResponseStatus(value = HttpStatus.OK)
-    public void createReport(@RequestParam(value = "articleId", required = false) String articleId,
-                             @RequestParam(value = "reportText", required = false) String reportText) {
+    public void createReport(@RequestParam("articleId") String articleId,
+                             @RequestParam("reportText") String reportText) {
         Article article = articleService.findById(Long.valueOf(articleId));
         articleService.createReport(article, reportText);
     }

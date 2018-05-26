@@ -8,13 +8,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByInMainGroupTrueOrderByCreationDateDesc(Pageable pageable);
 
     @Query("SELECT article FROM Article article " +
-            "WHERE :group MEMBER OF article.groups " +
-            "ORDER BY article.creationDate DESC")
+           "WHERE :group MEMBER OF article.groups " +
+           "ORDER BY article.creationDate DESC")
     Page<Article> findGroupArticles(@Param("group")Group group, Pageable pageable);
+
+    @Query("SELECT article FROM Article article " +
+           "WHERE article.title LIKE %:searchText% " +
+           "ORDER BY article.creationDate DESC")
+    Page<Article> searchArticles(@Param("searchText")String searchText, Pageable pageable);
 
 }

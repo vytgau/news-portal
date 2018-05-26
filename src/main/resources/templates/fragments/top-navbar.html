@@ -42,6 +42,10 @@
                     </div>
                 </li>
             </div>
+            <form class="form-inline my-lg-0" action="/search/articles" method="get">
+                <input class="form-control mr-2" name="searchText" type="search" placeholder="Ieškoti straipsnių" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+            </form>
             <a href="/entry" sec:authorize="isAnonymous()" style="margin-right: 75px">Prisijungti</a>
             <div class="dropdown" sec:authorize="isAuthenticated()" style="margin-right: 100px">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

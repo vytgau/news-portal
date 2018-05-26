@@ -210,3 +210,12 @@ nav div a.nav-item::after {
     cursor: pointer;
     color: #db0404;
 }
+
+.article-search-item a{
+    text-decoration: none;
+    color: black;
+}
+
+.article-search-item a:hover{
+    color: gray;
+}
