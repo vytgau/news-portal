@@ -96,12 +96,12 @@
                                                         items.push("</label></div>");
                                                     }
 
-                                                    $.each(data, function (index, groupUser) {
+                                                    $.each(data, function (index, groupItem) {
                                                         items.push("<div class=\"form-check\"><label>");
-                                                        if (fromGroup != null && fromGroup == groupUser.group.id) {
-                                                            items.push("<input type=\"checkbox\" name=\"groups\" value=\"" + groupUser.group.id + "\" checked> <span class=\"label-text\">" + groupUser.group.title + "</span>");
+                                                        if (fromGroup != null && fromGroup == groupItem.groupId) {
+                                                            items.push("<input type=\"checkbox\" name=\"groups\" value=\"" + groupItem.groupId + "\" checked> <span class=\"label-text\">" + groupItem.groupTitle + "</span>");
                                                         } else {
-                                                            items.push("<input type=\"checkbox\" name=\"groups\" value=\"" + groupUser.group.id + "\"> <span class=\"label-text\">" + groupUser.group.title + "</span>");
+                                                            items.push("<input type=\"checkbox\" name=\"groups\" value=\"" + groupItem.groupId + "\"> <span class=\"label-text\">" + groupItem.groupTitle + "</span>");
                                                         }
                                                         items.push("</label></div>");
                                                     });

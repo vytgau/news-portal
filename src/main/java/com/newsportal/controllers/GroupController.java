@@ -1,27 +1,28 @@
 package com.newsportal.controllers;
 
-import com.newsportal.models.Group;
-import com.newsportal.models.GroupInvitation;
-import com.newsportal.models.GroupUser;
-import com.newsportal.models.User;
+import com.newsportal.models.*;
 import com.newsportal.models.enums.Role;
+import com.newsportal.services.ArticleService;
 import com.newsportal.services.GroupService;
 import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
+import com.newsportal.viewmodels.GroupUsersListItem;
+import com.newsportal.viewmodels.HomeSideMenuGroupsItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class GroupController {
 
+    @Autowired private ArticleService articleService;
     @Autowired private GroupService groupService;
     @Autowired private UserService userService;
     @Autowired private GroupUserService groupUserService;
@@ -73,15 +74,20 @@ public class GroupController {
      * @param id group id
      */
     @GetMapping("/group")
-    public String group(@RequestParam String id, Model model, Principal principal) {
+    public String group(@RequestParam(name = "p", defaultValue = "0") int pageNumber,
+                        @RequestParam String id,
+                        Model model,
+                        Principal principal) {
         String username = principal.getName();
 
         Group group = groupService.findById(Long.valueOf(id));
         User user = userService.findByUsername(username);
         GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+        Page<Article> page = articleService.findArticlesGroup(pageNumber, group);
 
         model.addAttribute("group", group);
         model.addAttribute("groupUser", groupUser);
+        model.addAttribute("page", page);
 
         return "group";
     }
@@ -103,7 +109,7 @@ public class GroupController {
      */
     @GetMapping("/get/groups/publish_rights")
     @ResponseBody
-    public List<GroupUser> getGroupsUserCanPublishArticlesTo(Principal principal) {
+    public List<GroupUsersListItem> getGroupsUserCanPublishArticlesTo(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         List<GroupUser> groupUserRecords = groupUserService.findByUserId(user.getId());
         return groupUserService.findGroupUsersWithPublishRights(groupUserRecords);
@@ -124,9 +130,15 @@ public class GroupController {
      */
     @GetMapping("/get/groups")
     @ResponseBody
-    public List<Group> getGroups(Principal principal) {
+    public List<HomeSideMenuGroupsItem> getGroups(Principal principal) {
         String username = principal.getName();
-        return groupService.findGroupsUserBelongsToByUsername(username);
+        List<Group> groups = groupService.findGroupsUserBelongsToByUsername(username);
+
+        List<HomeSideMenuGroupsItem> result = new ArrayList<>();
+        groups.forEach(group -> {
+            result.add(new HomeSideMenuGroupsItem(group.getId(), group.getTitle()));
+        });
+        return result;
     }
 
 

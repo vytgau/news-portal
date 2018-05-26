@@ -13,6 +13,34 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <div class="container-fluid">
+
+            <div th:each="rowNo : ${#numbers.sequence( 0, 15, 4)}" th:if="${rowNo < page.getContent().size()}">
+                <div class="row">
+                    <div th:each="itemNo : ${#numbers.sequence( rowNo, rowNo + 3, 1)}" class="col-sm-6 col-md-3 imgBox"
+                         th:if="${itemNo < page.getContent().size()}">
+                        <div class="thumbnail">
+                            <a th:href="@{/article(articleId=${page.getContent().get(itemNo).getId()}, groupId=${group.getId()})}" class="article-thumbnail-link">
+                                <img th:src="@{/image(articleId=${page.getContent().get(itemNo).getId()})}"
+                                     alt="alt text" class="img-thumbnail rounded" width="430" height="260">
+                                <div class="caption">
+                                    <h5 th:text="${page.getContent().get(itemNo).getTitle()}">Straipsnio pavadinimas</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+            </div>
+
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item" th:if="${page.hasPrevious()}">
+                    <a class="page-link" th:href="@{/(p=${page.getNumber() - 1})}"><< Ankstesnis</a>
+                </li>
+                <li class="page-item" th:if="${page.hasNext()}">
+                    <a class="page-link" th:href="@{/(p=${page.getNumber() + 1})}">Sekantis >></a>
+                </li>
+            </ul>
+
         </div>
     </div>
 

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+
+    <th:block th:switch="${inGroup}">
+        <th:block th:case="true">
+            <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+        </th:block>
+        <th:block th:case="*">
+            <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+        </th:block>
+    </th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <h2><span th:text="${article.getTitle()}">Straipsnio pavadinimas</span> &emsp;
+                        <i id="like-btn" class="fas fa-thumbs-up"></i>&nbsp;&nbsp;
+                        <i id="dislike-btn" class="fas fa-thumbs-down"></i>&nbsp;&nbsp;
+                        <span id="article-rating" th:text="${article.getRating()}">(+15)</span>
+                    </h2>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-8">
+                    <i>Autorius:&nbsp;</i>
+                    <span th:text="${article.getAuthor().getFirstname()}">Vardenis</span>
+                    <span th:text="${article.getAuthor().getLastname()}">Pavardenis</span>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-warning float-right">Klaida&nbsp;&nbsp;<i class="fas fa-exclamation-triangle"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <i>Publikuota:&nbsp;</i>
+                    <span th:text="${article.getCreationDate()}"></span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <img th:src="@{/image(articleId=${article.getId()})}" alt="article thumbnail" class="img-thumbnail" width="50%">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-9">
+                    <p th:text="${article.getText()}"></p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <h4><span th:text="${comments.size()}"></span> Komentarai</h4>
+                </div>
+            </div>
+            <form>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <textarea class="form-control" id="comment-textarea" rows="3" placeholder="Jūsų komentaras"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-secondary float-right">Pateikti</button>
+                    </div>
+                </div>
+            </form>
+            <br><br>
+            <div class="row" th:each="comment : ${comments}">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <h6>
+                                <span th:text="${comment.getUser().getFirstname()}">Vardas</span>
+                                &nbsp;
+                                <span th:text="${comment.getUser().getLastname()}">Pavardė</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p th:text="${comment.getText()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <th:block th:if="${inGroup == null}" th:insert="~{fragments/invitations-modal :: invitations-modal}"></th:block>
+
+        </div>
+    </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>

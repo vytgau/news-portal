@@ -52,7 +52,7 @@ $('#invitations-modal-div').on('click','button',function(event){
 
 function handleInvitationClicks(id) {
     var invitationId = id.substring(id.indexOf('-') + 1);
-    alert(invitationId);
+
     if (id.substring(0, id.indexOf("-")) == "accept") {
         acceptInvitation(invitationId);
     } else {

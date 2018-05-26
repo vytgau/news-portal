@@ -188,3 +188,25 @@ nav div a.nav-item::after {
     text-decoration: none;
     color: black;
 }
+
+/* Article */
+
+#like-btn {
+    font-size:0.75em;
+    color: green;
+}
+
+#like-btn:hover {
+    cursor: pointer;
+    color: #0ba30f;
+}
+
+#dislike-btn {
+    font-size:0.75em;
+    color: red;
+}
+
+#dislike-btn:hover {
+    cursor: pointer;
+    color: #db0404;
+}

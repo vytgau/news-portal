@@ -1,6 +1,7 @@
 package com.newsportal.services;
 
 import com.newsportal.models.GroupUser;
+import com.newsportal.viewmodels.GroupUsersListItem;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface GroupUserService {
 
     List<GroupUser> search(String groupId, String searchTerm);
 
-    List<GroupUser> findGroupUsersWithPublishRights(List<GroupUser> groupUsers);
+    List<GroupUsersListItem> findGroupUsersWithPublishRights(List<GroupUser> groupUsers);
 
 }

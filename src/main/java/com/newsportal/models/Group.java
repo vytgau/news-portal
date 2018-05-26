@@ -65,4 +65,15 @@ public class Group {
     public Set<Article> getArticles() { return articles; }
 
     public void setArticles(Set<Article> articles) { this.articles = articles; }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Group other = (Group)obj;
+        return id.equals(other.id);
+    }
 }

@@ -1,8 +1,9 @@
 package com.newsportal.controllers;
 
-import com.newsportal.models.Article;
-import com.newsportal.models.User;
+import com.newsportal.models.*;
 import com.newsportal.services.ArticleService;
+import com.newsportal.services.GroupService;
+import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ArticleController {
@@ -29,6 +31,12 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private GroupUserService groupUserService;
+
     /**
      * Opens homepage
      */
@@ -37,6 +45,34 @@ public class ArticleController {
         Page<Article> page = articleService.findArticlesHomePage(pageNumber);
         model.addAttribute("page", page);
         return "home";
+    }
+
+    /**
+     * Opens article page
+     */
+    @GetMapping(value = "/article")
+    public String openArticle(@RequestParam(name = "articleId") Long articleId,
+                              @RequestParam(name = "groupId", required = false) Long groupId,
+                              Principal principal,
+                              Model model) {
+        if (groupId != null) {
+            String username = principal.getName();
+            Group group = groupService.findById(Long.valueOf(groupId));
+            User user = userService.findByUsername(username);
+            GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+
+            model.addAttribute("inGroup", true);
+            model.addAttribute("group", group);
+            model.addAttribute("groupUser", groupUser);
+        }
+
+        Article article = articleService.findById(articleId);
+        List<Comment> comments = articleService.findArticleComments(articleId);
+
+        model.addAttribute("article", article);
+        model.addAttribute("comments", comments);
+
+        return "article";
     }
 
     @GetMapping("/create/article")

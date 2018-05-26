@@ -1,9 +1,13 @@
 package com.newsportal.services.implementation;
 
 import com.newsportal.models.Article;
+import com.newsportal.models.Comment;
+import com.newsportal.models.Group;
 import com.newsportal.models.User;
 import com.newsportal.repositories.ArticleRepository;
+import com.newsportal.repositories.CommentRepository;
 import com.newsportal.services.ArticleService;
+import com.newsportal.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +19,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -23,6 +30,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public Article findById(long articleId) {
@@ -33,6 +46,18 @@ public class ArticleServiceImpl implements ArticleService {
     public Page<Article> findArticlesHomePage(int pageNumber) {
         Pageable pageable = getPageable(pageNumber);
         return articleRepository.findByInMainGroupTrueOrderByCreationDateDesc(pageable);
+    }
+
+    @Override
+    public Page<Article> findArticlesGroup(int pageNumber, Group group) {
+        Pageable pageable = getPageable(pageNumber);
+        Page<Article> articles = articleRepository.findGroupArticles(group, pageable);
+        return articles;
+    }
+
+    @Override
+    public List<Comment> findArticleComments(Long articleId) {
+        return commentRepository.findByArticleIdOrderByCreationDateDesc(articleId);
     }
 
     @Override
@@ -51,13 +76,24 @@ public class ArticleServiceImpl implements ArticleService {
         article.setViews(0);
         article.setPublicationTime(parsePublishTimeString(publishTime));
         article.setAuthor(author);
-        article.setInMainGroup(true);
 
         try {
             article.setPicture(articlePicture.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Set<Group> groupSet = new HashSet<>();
+        for(String groupId : groups) {
+            if (groupId.equals("MAIN")) {
+                article.setInMainGroup(true);
+            } else {
+                Group group = groupService.findById(Long.valueOf(groupId));
+                groupSet.add(group);
+            }
+        }
+
+        article.setGroups(groupSet);
 
         articleRepository.save(article);
     }

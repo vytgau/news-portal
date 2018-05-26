@@ -19,7 +19,7 @@
                     <div th:each="itemNo : ${#numbers.sequence( rowNo, rowNo + 3, 1)}" class="col-sm-6 col-md-3 imgBox"
                          th:if="${itemNo < page.getContent().size()}">
                         <div class="thumbnail">
-                            <a href="#" class="article-thumbnail-link">
+                            <a th:href="@{/article(articleId=${page.getContent().get(itemNo).getId()})}" class="article-thumbnail-link">
                                 <img th:src="@{/image(articleId=${page.getContent().get(itemNo).getId()})}"
                                      alt="alt text" class="img-thumbnail rounded" width="430" height="260">
                                 <div class="caption">
