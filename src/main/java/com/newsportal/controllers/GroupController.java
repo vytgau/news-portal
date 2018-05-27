@@ -206,8 +206,31 @@ public class GroupController {
 
     @PostMapping("/delete_group")
     public RedirectView deleteGroup(
-            @RequestParam("groupID") String groupID) {
+            @RequestParam("groupID") String groupID,
+            Principal principal) {
         groupService.deleteGroup(Integer.valueOf(groupID));
         return new RedirectView("/");
     }
+
+    @GetMapping(value = "/edit-group")
+    public String openGroupEditForm(@RequestParam(name = "groupID")Long groupID,
+                                  Principal principal,
+                                  Model model) {
+            Group group = groupService.findById(groupID);
+            model.addAttribute("group", group);
+
+            return "edit-group";
+        }
+
+    @PostMapping("/edit-group")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView editArticle(
+            @RequestParam("groupTitle") String groupTitle,
+            @RequestParam("groupDescription") String groupDescription,
+            @RequestParam(name = "groupID")Long groupID
+    ) {
+            Group group = groupService.findById(Long.valueOf(groupID));
+            groupService.editGroup(groupTitle, groupDescription, group);
+            return new RedirectView("/");
+        }
 }

@@ -24,6 +24,8 @@ public interface GroupService {
 
     void createGroup(String groupTitle, String groupDescription, User author);
 
+    void editGroup(String groupTitle, String groupDescription, Group group);
+
     void deleteGroup(int id);
 
 }

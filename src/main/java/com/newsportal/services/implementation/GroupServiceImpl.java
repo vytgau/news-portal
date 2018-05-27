@@ -102,6 +102,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public void editGroup(String groupTitle, String groupDescription, Group group) {
+        group.setTitle(groupTitle);
+        group.setDescription(groupDescription);
+
+        groupRepository.save(group);
+    }
+
+    @Override
     public void deleteGroup(int id) {
         groupInvitationRepository.deleteAll(groupInvitationRepository.findByGroupId((long) id));
         groupUserRepository.deleteAll(groupUserRepository.findByGroupId((long) id));
