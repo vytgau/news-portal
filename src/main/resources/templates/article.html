@@ -103,6 +103,15 @@
                             </h6>
                         </div>
                     </div>
+                    <div th:if="${user != null}">
+                        <div class="row" th:if="${comment.getUser().getUsername() == user.getUsername()}">
+                            <a class="btn btn-outline-primary" th:href="@{/comment-edit(commentId=${comment.getId()})}">Redaguoti</a>
+                            <form method="post" action="/comment-delete">
+                                <input type="hidden" name="commentId" th:value="${comment.getId()}"/>
+                                <button type="submit" class="btn btn-outline-danger">Istrinti</button>
+                            </form>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <p th:text="${comment.getText()}"></p>

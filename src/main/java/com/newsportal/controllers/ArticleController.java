@@ -57,6 +57,10 @@ public class ArticleController {
                               @RequestParam(name = "groupId", required = false) Long groupId,
                               Principal principal,
                               Model model) {
+        if(principal != null) {
+            User user = userService.findByUsername(principal.getName());
+            model.addAttribute("user", user);
+        }
         if (groupId != null) {
             String username = principal.getName();
             Group group = groupService.findById(Long.valueOf(groupId));
