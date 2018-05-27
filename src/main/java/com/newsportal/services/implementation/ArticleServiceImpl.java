@@ -116,7 +116,7 @@ public class ArticleServiceImpl implements ArticleService {
         Notification notification = new Notification();
 
         report.setDate(new Date());
-        report.setState(ReportState.CREATED);
+        report.setState(ReportState.Sukurtas);
         report.setArticle(article);
         report.setComment(reportText);
 
