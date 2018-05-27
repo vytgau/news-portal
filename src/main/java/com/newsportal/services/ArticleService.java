@@ -23,6 +23,8 @@ public interface ArticleService {
 
     void createArticle(MultipartFile articlePicture, String articleTitle, String publishTime, String[] groups, String articleText, User author);
 
+    void save(Article article);
+
     void createReport(Article article, String reportText);
 
     List<Comment> findArticleComments(Long articleId);

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -125,4 +126,30 @@ public class ArticleController {
         return "userArticleList";
     }
 
+    @GetMapping(value = "/article-edit")
+    public String openArticleEditForm(@RequestParam(name = "articleId")Long articleId,
+                                      Principal principal,
+                                      Model model) {
+        Article article = articleService.findById(articleId);
+
+        model.addAttribute("article", article);
+
+        return "article-edit";
+    }
+
+    @PostMapping("/article-edit")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView editArticle(@RequestParam("articleId") String articleId,
+                            @RequestParam("articleTitle") String articleTitle,
+                            @RequestParam("articleText") String articleText) {
+        Article article = articleService.findById(Long.valueOf(articleId));
+
+        article.setTitle(articleTitle);
+        article.setText(articleText);
+        article.setEditDate(new Date(System.currentTimeMillis()));
+
+        articleService.save(article);
+
+        return new RedirectView("/user-articles");
+    }
 }

@@ -129,6 +129,11 @@ public class ArticleServiceImpl implements ArticleService {
         notificationRepository.save(notification);
     }
 
+    @Override
+    public void save(Article article) {
+        articleRepository.save(article);
+    }
+
     /**
      * publishTime String format example: '05/25/2018 5:37 PM'
      */
