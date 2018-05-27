@@ -49,9 +49,7 @@
                 <h4>Mano Straipsniai</h4>
             </div>
             <li>
-                <form action="#" method="get">
-                    <button type="button" class="btn sidebar-menu-btn">Peržiūrėti straipsnius</button>
-                </form>
+                <button type="button"  class="btn sidebar-menu-btn" onclick="window.location.href='/user-articles'">Peržiūrėti straipsnius</button>
             </li>
             <li sec:authorize="hasAnyRole('ROLE_WRITER','ROLE_ADMIN')">
                 <button type="button" class="btn sidebar-menu-btn" onclick="window.location.href='/create/article?fromhome=true'">Rašyti naują straipsnį</button>

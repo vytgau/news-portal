@@ -59,6 +59,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Page<Article> findByAuthor(int pageNumber, User author) {
+        Pageable pageable = getPageable(pageNumber);
+        return articleRepository.findByAuthor(author, pageable);
+    }
+
+    @Override
     public Page<Article> searchArticles(int pageNumber, String searchText) {
         Pageable pageable = getPageableSearch(pageNumber);
         return articleRepository.searchArticles(searchText, pageable);

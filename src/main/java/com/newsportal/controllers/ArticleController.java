@@ -113,4 +113,16 @@ public class ArticleController {
 
         return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/user-articles")
+    public String openUserArticles(@RequestParam(name = "p", defaultValue = "0") int pageNumber,
+                                   Principal principal,
+                                   Model model) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        Page<Article> page = articleService.findByAuthor(pageNumber, user);
+        model.addAttribute("page", page);
+        return "userArticleList";
+    }
+
 }
