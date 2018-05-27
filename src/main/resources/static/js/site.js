@@ -25,8 +25,8 @@ function showNewInvitations() {
         "/get/new_invitations", function (data) {
             if (data.length != 0) {
                 $.each(data, function (index, groupInvitation) {
-                    var groupTitle = groupInvitation.group.title;
-                    var invitationId = groupInvitation.id;
+                    var groupTitle = groupInvitation.groupTitle;
+                    var invitationId = groupInvitation.invitationId;
 
                     $( "#invitations-modal-div" ).append( "<div class=\"row\" id=\"invitation-" + invitationId + "\"></div>" );
                     $( "#invitation-" + invitationId ).append( "<div class=\"col-sm-8\"><p>" + groupTitle + "</p></div>" );

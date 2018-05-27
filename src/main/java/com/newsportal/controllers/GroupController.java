@@ -6,8 +6,7 @@ import com.newsportal.services.ArticleService;
 import com.newsportal.services.GroupService;
 import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
-import com.newsportal.viewmodels.GroupUsersListItem;
-import com.newsportal.viewmodels.HomeSideMenuGroupsItem;
+import com.newsportal.viewmodels.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -78,9 +77,19 @@ public class GroupController {
 
     @GetMapping("/search/group/members")
     @ResponseBody
-    public List<GroupUser> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
-        List<GroupUser> temp = groupUserService.search(groupId, searchTerm);
-        return groupUserService.search(groupId, searchTerm);
+    public List<GroupMembersSearchItem> searchGroupMembers(@RequestParam String groupId, @RequestParam String searchTerm) {
+        List<GroupUser> groupMembers = groupUserService.search(groupId, searchTerm);
+        List<GroupMembersSearchItem> result = new ArrayList<>();
+
+        groupMembers.forEach(groupUser -> {
+            result.add(new GroupMembersSearchItem(groupUser.getId(),
+                    groupUser.getGroup().getId(),
+                    groupUser.getUser().getUsername(),
+                    groupUser.getUser().getFirstname(),
+                    groupUser.getUser().getLastname()));
+        });
+
+        return result;
     }
 
     /**
@@ -121,14 +130,15 @@ public class GroupController {
     }
 
 
-    @GetMapping("/current_group-user")
+    @GetMapping("/current_group_user_role")
     @ResponseBody
-    public GroupUser getCurrentGroupUser(@RequestParam String groupId, Principal principal) {
+    public CurrentGroupUserRole getCurrentGroupUser(@RequestParam String groupId, Principal principal) {
         String username = principal.getName();
         User user = userService.findByUsername(username);
         Group group = groupService.findById(Long.valueOf(groupId));
+        String role = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId()).getRole().name();
 
-        return groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+        return new CurrentGroupUserRole(role);
     }
 
     /**
@@ -137,9 +147,15 @@ public class GroupController {
      */
     @GetMapping("/get/new_invitations")
     @ResponseBody
-    public List<GroupInvitation> getNewInvitations(Principal principal) {
+    public List<GroupInvitationsItem> getNewInvitations(Principal principal) {
         String username = principal.getName();
-        return groupService.findNewInvitations(username);
+        List<GroupInvitation> groupInvitations = groupService.findNewInvitations(username);
+        List<GroupInvitationsItem> result = new ArrayList<>();
+
+        groupInvitations.forEach(groupInvitation -> {
+            result.add(new GroupInvitationsItem(groupInvitation.getId(), groupInvitation.getGroup().getTitle()));
+        });
+        return result;
     }
 
     @PostMapping("/accept_invitation")

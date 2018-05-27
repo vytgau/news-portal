@@ -117,7 +117,7 @@
             $.getJSON('/search/group/members', { groupId: gId, searchTerm: term}, function(data){
                 var result = [];
                 $.each(data, function (index, value) {
-                    var username = value.user.username;
+                    var username = value.username;
 
                     result.push(username);
                 });
@@ -168,10 +168,10 @@
         var url = new URL(window.location.href);
         var groupId = url.searchParams.get("groupid");
         var currentUser = {};
-        var currentGroupUser = {};
 
-        $.getJSON('/current_group-user', { groupId: groupId }, function(result){
-            currentGroupUser = result;
+        $.getJSON('/current_group_user_role', { groupId: groupId }, function(result){
+            var role = result.role;
+            
             // search for group members
             $.getJSON('/search/group/members', { groupId: groupId, searchTerm: searchTerm}, function(groupMembers){
 
@@ -181,19 +181,19 @@
                     currentUser = data;
 
                     $.each(groupMembers, function (index, value) {
-                        var username = value.user.username;
-                        var firstname = value.user.firstname;
-                        var lastname = value.user.lastname;
+                        var username = value.username;
+                        var firstname = value.firstname;
+                        var lastname = value.lastname;
 
                         var item = '<div class="row rounded mx-2 py-1 h-100 group-members-search-item">';
                         item = item.concat('<div class="col-10 my-auto">');
-                        item = item.concat('<a href="/group/member?groupId=' + value.group.id + '&groupMemberId=' + value.id + '">');
+                        item = item.concat('<a href="/group/member?groupId=' + value.groupid + '&groupMemberId=' + value.id + '">');
                         item = item.concat(username + '(<i>' + firstname + ', ' + lastname + ')');
                         item = item.concat('</a>');
                         item = item.concat('</div>');
                         item = item.concat('<div class="col-2 ">');
-                        if (currentGroupUser.role == 'ADMIN') {
-                            if (value.user.username == currentUser.username) {
+                        if (role == 'ADMIN') {
+                            if (value.username == currentUser.username) {
                                 item = item.concat('<span><i>you</i></span>');
                             } else {
                                 item = item.concat('<button class="btn btn-outline-secondary" type="button" value="' + value.id + '">');
@@ -310,6 +310,7 @@
             data: { groupUserId: groupUserId },
             success: function() {
                 (element.parentElement.parentElement.parentElement).fadeOut(300, function() { $(this).remove(); });
+                searchUsers(searchTerm);
             }
         });
     }

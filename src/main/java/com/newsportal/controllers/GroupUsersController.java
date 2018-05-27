@@ -4,7 +4,6 @@ import com.newsportal.models.Group;
 import com.newsportal.models.GroupUser;
 import com.newsportal.models.User;
 import com.newsportal.models.enums.Role;
-import com.newsportal.services.ArticleService;
 import com.newsportal.services.GroupService;
 import com.newsportal.services.GroupUserService;
 import com.newsportal.services.UserService;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class GroupUsersController {
