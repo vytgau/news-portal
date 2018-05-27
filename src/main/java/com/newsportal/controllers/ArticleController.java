@@ -152,4 +152,10 @@ public class ArticleController {
 
         return new RedirectView("/user-articles");
     }
+
+    @PostMapping("/delete-article")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView deleteArticle(@RequestParam("articleId") String articleId) {
+        return new RedirectView("/user-articles");
+    }
 }

@@ -108,6 +108,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    public void deleteById(long id){ articleRepository.deleteById(id);}
+
     @Override
     public void createReport(Article article, String reportText) {
         Report report = new Report();
