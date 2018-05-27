@@ -198,4 +198,9 @@ public class User {
         }
         else return "Nenustatyta";
     }
+
+    public void changeBan()
+    {
+            isBanned = !isBanned;
+    }
 }
