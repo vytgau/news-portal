@@ -160,6 +160,10 @@ public class ArticleController {
     @PostMapping("/delete-article")
     @ResponseStatus(value=HttpStatus.OK)
     public RedirectView deleteArticle(@RequestParam("articleId") String articleId) {
+        Article article = articleService.findById(Long.valueOf(articleId));
+
+        articleService.delete(article);
+
         return new RedirectView("/user-articles");
     }
 }

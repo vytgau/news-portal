@@ -25,7 +25,7 @@ public interface ArticleService {
 
     void save(Article article);
 
-    void deleteById(long id);
+    void delete(Article article);
 
     void createReport(Article article, String reportText);
 
