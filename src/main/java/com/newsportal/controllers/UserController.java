@@ -88,14 +88,13 @@ public class UserController {
     public String editUserPost(User user, Model model, User userFromPost, int id)
     {
         model.addAttribute("users",userService.findById(id));
+        userFromPost.setPassword(userService.findById(id).getPassword());
         userService.save(userFromPost);
         //got user now to validate
-        model.addAttribute("user",userFromPost);
-        model.addAttribute("genders", Gender.values());
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("changes",3);
 
 
-        return "editUser";
+        return "redirect:/manage?changes=3";
     }
 
     @RequestMapping(value = "/deleteuser", method=RequestMethod.GET)
@@ -109,9 +108,12 @@ public class UserController {
     public String blockUser(User user, Model model, int id)
     {
         User userToBlock = userService.findById(id);
-        userToBlock.setBanned(true);
-        //userService.save(userToBlock);
+        userToBlock.changeBan();
+        userService.save(userToBlock);
+        if (userToBlock.isBanned())
         return "redirect:/manage?changes=2";
+        else
+            return "redirect:/manage?changes=4";
     }
 
     @RequestMapping(value = "/notifications", method=RequestMethod.GET)
@@ -124,7 +126,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/notification", method=RequestMethod.GET)
-    public String viewNotifications(User user, Model model, int id)
+    public String viewNotification(User user, Model model, int id)
     {
         Notification notification = notificationService.findById(id);
         notification.setIsread(true);
