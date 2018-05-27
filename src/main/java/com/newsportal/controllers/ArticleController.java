@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -56,6 +57,10 @@ public class ArticleController {
                               @RequestParam(name = "groupId", required = false) Long groupId,
                               Principal principal,
                               Model model) {
+        if(principal != null) {
+            User user = userService.findByUsername(principal.getName());
+            model.addAttribute("user", user);
+        }
         if (groupId != null) {
             String username = principal.getName();
             Group group = groupService.findById(Long.valueOf(groupId));
@@ -112,5 +117,53 @@ public class ArticleController {
         headers.setContentType(MediaType.IMAGE_PNG);
 
         return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user-articles")
+    public String openUserArticles(@RequestParam(name = "p", defaultValue = "0") int pageNumber,
+                                   Principal principal,
+                                   Model model) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        Page<Article> page = articleService.findByAuthor(pageNumber, user);
+        model.addAttribute("page", page);
+        return "userArticleList";
+    }
+
+    @GetMapping(value = "/article-edit")
+    public String openArticleEditForm(@RequestParam(name = "articleId")Long articleId,
+                                      Principal principal,
+                                      Model model) {
+        Article article = articleService.findById(articleId);
+
+        model.addAttribute("article", article);
+
+        return "article-edit";
+    }
+
+    @PostMapping("/article-edit")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView editArticle(@RequestParam("articleId") String articleId,
+                            @RequestParam("articleTitle") String articleTitle,
+                            @RequestParam("articleText") String articleText) {
+        Article article = articleService.findById(Long.valueOf(articleId));
+
+        article.setTitle(articleTitle);
+        article.setText(articleText);
+        article.setEditDate(new Date(System.currentTimeMillis()));
+
+        articleService.save(article);
+
+        return new RedirectView("/user-articles");
+    }
+
+    @PostMapping("/delete-article")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView deleteArticle(@RequestParam("articleId") String articleId) {
+        Article article = articleService.findById(Long.valueOf(articleId));
+
+        articleService.delete(article);
+
+        return new RedirectView("/user-articles");
     }
 }

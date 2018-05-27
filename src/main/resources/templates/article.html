@@ -73,21 +73,24 @@
                     <h4><span th:text="${comments.size()}"></span> Komentarai</h4>
                 </div>
             </div>
-            <form>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <textarea class="form-control" id="comment-textarea" rows="3"
+            <div sec:authorize="isAuthenticated()">
+                <form method="post" action="/create/comment">
+                    <div class="row">
+                        <div class="col-4">
+                            <input type="hidden" name="articleId" th:value="${article.getId()}"/>
+                            <div class="form-group">
+                            <textarea class="form-control" id="comment-textarea" name="commentText" rows="3"
                                       placeholder="Jūsų komentaras"></textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-secondary float-right">Pateikti</button>
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-secondary float-right">Pateikti</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
             <br><br>
             <div class="row" th:each="comment : ${comments}">
                 <div class="col-6">
@@ -98,6 +101,15 @@
                                 &nbsp;
                                 <span th:text="${comment.getUser().getLastname()}">Pavardė</span>
                             </h6>
+                        </div>
+                    </div>
+                    <div th:if="${user != null}">
+                        <div class="row" th:if="${comment.getUser().getUsername() == user.getUsername()}">
+                            <a class="btn btn-outline-primary" th:href="@{/comment-edit(commentId=${comment.getId()})}">Redaguoti</a>
+                            <form method="post" action="/comment-delete">
+                                <input type="hidden" name="commentId" th:value="${comment.getId()}"/>
+                                <button type="submit" class="btn btn-outline-danger">Istrinti</button>
+                            </form>
                         </div>
                     </div>
                     <div class="row">

@@ -59,6 +59,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Page<Article> findByAuthor(int pageNumber, User author) {
+        Pageable pageable = getPageable(pageNumber);
+        return articleRepository.findByAuthor(author, pageable);
+    }
+
+    @Override
     public Page<Article> searchArticles(int pageNumber, String searchText) {
         Pageable pageable = getPageableSearch(pageNumber);
         return articleRepository.searchArticles(searchText, pageable);
@@ -102,6 +108,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    public void delete(Article article){ articleRepository.delete(article);}
+
     @Override
     public void createReport(Article article, String reportText) {
         Report report = new Report();
@@ -121,6 +129,11 @@ public class ArticleServiceImpl implements ArticleService {
 
         reportRepository.save(report);
         notificationRepository.save(notification);
+    }
+
+    @Override
+    public void save(Article article) {
+        articleRepository.save(article);
     }
 
     /**
