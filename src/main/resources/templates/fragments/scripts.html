@@ -6,8 +6,29 @@
 <body>
 
 <div th:fragment="scripts">
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/site.js"></script>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/site.js"></script>
+
+    <script>
+        $('#delete-group').on('click',function(event){
+            var element = $(event.target);
+            var value = element.val();
+            deleteGroup(value, element);
+
+        });
+
+        function deleteGroup(groupID, element) {
+            $.ajax({
+                type: "POST",
+                url: "/delete_group",
+                data: { groupID: groupID },
+                success: function() {
+                    (element.parentElement.parentElement.parentElement).fadeOut(300, function() { $(this).remove(); });
+                }
+            });
+        }
+    </script>
 </div>
 </body>
 </html>

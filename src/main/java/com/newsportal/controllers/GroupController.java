@@ -23,10 +23,14 @@ import java.util.List;
 @Controller
 public class GroupController {
 
-    @Autowired private ArticleService articleService;
-    @Autowired private GroupService groupService;
-    @Autowired private UserService userService;
-    @Autowired private GroupUserService groupUserService;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private GroupService groupService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private GroupUserService groupUserService;
 
     /**
      * Opens group members management page
@@ -51,6 +55,7 @@ public class GroupController {
 
     /**
      * Opens group main page
+     *
      * @param id group id
      */
     @GetMapping("/group")
@@ -191,11 +196,18 @@ public class GroupController {
 
     @PostMapping("/create/group")
     public RedirectView createGroup(
-                                      @RequestParam("groupTitle") String groupTitle,
-                                      @RequestParam("groupDescription") String groupDescription,
-                                      Principal principal) {
+            @RequestParam("groupTitle") String groupTitle,
+            @RequestParam("groupDescription") String groupDescription,
+            Principal principal) {
         User admin = userService.findByUsername(principal.getName());
         groupService.createGroup(groupTitle, groupDescription, admin);
+        return new RedirectView("/");
+    }
+
+    @PostMapping("/delete_group")
+    public RedirectView deleteGroup(
+            @RequestParam("groupID") String groupID) {
+        groupService.deleteGroup(Integer.valueOf(groupID));
         return new RedirectView("/");
     }
 }

@@ -100,4 +100,13 @@ public class GroupServiceImpl implements GroupService {
 
         groupUserRepository.save(groupAdmin);
     }
+
+    @Override
+    public void deleteGroup(int id) {
+        groupInvitationRepository.deleteAll(groupInvitationRepository.findByGroupId((long) id));
+        groupUserRepository.deleteAll(groupUserRepository.findByGroupId((long) id));
+        groupRepository.deleteById((long) id);
+
+    }
+
 }

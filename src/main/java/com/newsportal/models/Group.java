@@ -19,7 +19,7 @@ public class Group {
     private String description;
 
     // a set of articles that this group has
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(mappedBy = "groups", cascade = CascadeType.ALL)
     private Set<Article> articles;
 
     public Group() {}
@@ -65,6 +65,8 @@ public class Group {
     public Set<Article> getArticles() { return articles; }
 
     public void setArticles(Set<Article> articles) { this.articles = articles; }
+
+
 
     @Override
     public int hashCode() {
