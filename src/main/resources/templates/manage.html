@@ -17,6 +17,15 @@
         Naudotojas užblokuotas.
     </div>
 </div>
+<div th:if="${deleted} == 3">
+    <div class="alert alert-info">
+        Naudotojo duomenys pakeisti.
+    </div>
+</div>
+<div th:if="${deleted} == 4">
+    <div class="alert alert-info">
+        Naudotojas atblokuotas.
+    </div>
 </div>
 <div id="wrapper">
 
@@ -56,7 +65,8 @@
                 <td th:text="${user.getRoleString()}">...</td>
                 <td><a th:href="@{/edituser(id=${user.id})}">Redaguoti</a></td>
                 <td><a th:href="@{/deleteuser(id=${user.id})}">Trinti</a></td>
-                <td><a th:href="@{/blockuser(id=${user.id})}">Blokuoti</a></td>
+                <td th:if="${user.isBanned()}" ><a th:href="@{/blockuser(id=${user.id})}">Atblokuoti</a></td>
+                <td th:if="${!user.isBanned()}" ><a th:href="@{/blockuser(id=${user.id})}">Blokuoti</a></td>
             </tr>
         </th:block>
         </tbody>
