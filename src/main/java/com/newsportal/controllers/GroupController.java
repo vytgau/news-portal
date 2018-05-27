@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -180,5 +182,20 @@ public class GroupController {
     @ResponseStatus(value = HttpStatus.OK)
     public void removeGroupUser(@RequestParam("groupUserId") String groupUserId) {
         groupService.removeGroupUser(Long.valueOf(groupUserId));
+    }
+
+    @GetMapping("/create/group")
+    public String openGroupCreationView() {
+        return "create-group";
+    }
+
+    @PostMapping("/create/group")
+    public RedirectView createGroup(
+                                      @RequestParam("groupTitle") String groupTitle,
+                                      @RequestParam("groupDescription") String groupDescription,
+                                      Principal principal) {
+        User admin = userService.findByUsername(principal.getName());
+        groupService.createGroup(groupTitle, groupDescription, admin);
+        return new RedirectView("/");
     }
 }

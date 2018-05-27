@@ -2,7 +2,7 @@ package com.newsportal.services;
 
 import com.newsportal.models.Group;
 import com.newsportal.models.GroupInvitation;
-import org.springframework.data.jpa.repository.Query;
+import com.newsportal.models.User;
 
 import java.util.List;
 
@@ -21,4 +21,7 @@ public interface GroupService {
     void createInvitation(long userId, long groupId);
 
     void removeGroupUser(long groupUserId);
+
+    void createGroup(String groupTitle, String groupDescription, User author);
+
 }
