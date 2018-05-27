@@ -1,6 +1,8 @@
 package com.newsportal.models;
 
 import javax.persistence.*;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -71,5 +73,14 @@ public class Notification {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String dateToString() {
+        if (date != null) {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.format(date);
+        }
+        else
+            return "Nenustatyta";
     }
 }

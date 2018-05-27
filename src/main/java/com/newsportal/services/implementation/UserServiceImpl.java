@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +45,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).get();
     }
 
+    public void deleteById(long id){ userRepository.deleteById(id);}
+
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -50,6 +55,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByUsernameContaining(String searchTerm) {
         return userRepository.findByUsernameContaining(searchTerm);
+    }
+
+    @Override
+    public List<User> findAll()
+    {
+        return userRepository.findAll();
     }
 
     @Override
@@ -99,10 +110,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Override
     public User save(User user) {
+
         return userRepository.save(user);
     }
+
 
     @Override
     public boolean existsByUsername(String username) {

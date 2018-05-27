@@ -40,6 +40,7 @@
         <li>
             <!-- A custom dropdown menu containing invitations to groups (not implemented yet) -->
             <button class="btn sidebar-menu-btn" type="button" data-toggle="modal" data-target="#invitations-list" id="invitations-modal-btn">Pakvietimai</button>
+
         </li>
         <br>
 
@@ -54,6 +55,7 @@
             </li>
             <li sec:authorize="hasAnyRole('ROLE_WRITER','ROLE_ADMIN')">
                 <button type="button" class="btn sidebar-menu-btn" onclick="window.location.href='/create/article?fromhome=true'">Rašyti naują straipsnį</button>
+                <button type="button" class="btn sidebar-menu-btn" onclick="window.location.href='/notifications'">Pranešimai</button>
             </li>
             <br>
         </div>
@@ -64,7 +66,7 @@
             </div>
             <li>
                 <form action="#" method="get">
-                    <button type="button" class="btn sidebar-menu-btn">Valdyti vartotojus</button>
+                    <button type="button" class="btn sidebar-menu-btn" onclick="window.location.href='/manage?changes=0'">Valdyti vartotojus</button>
                 </form>
             </li>
         </div>

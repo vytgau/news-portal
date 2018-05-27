@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+
+<div th:if="${deleted} == 1">
+    <div class="alert alert-info">
+        Naudotojas ištrintas.
+    </div>
+</div>
+<div th:if="${deleted} ==2">
+    <div class="alert alert-info">
+        Naudotojas užblokuotas.
+    </div>
+</div>
+</div>
+<div id="wrapper">
+
+    <th:block th:switch="${inGroup}">
+        <th:block th:case="true">
+            <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+        </th:block>
+        <th:block th:case="*">
+            <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+        </th:block>
+    </th:block>
+    <!-- Page Content -->
+    <div class="container">
+        <h1>Pranešimai</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Aprašas</th>
+                <th scope="col">Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="notification : ${allNotifications}">
+                <div th:if="${!notification.isIsread()}">
+                <tr>
+                    <td th:text="${notification.getDescription()}">...</td>
+                    <td th:text="${notification.dateToString()}">...</td>
+                    <td><a th:href="@{/notification(id=${notification.getId()})}">Plačiau</a></td>
+                </tr>
+                </div>
+            </th:block>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>
