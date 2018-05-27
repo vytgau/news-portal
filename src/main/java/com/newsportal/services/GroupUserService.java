@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface GroupUserService {
 
+    void save(GroupUser groupUser);
+
+    GroupUser findById(long id);
+
     List<GroupUser> findByGroupId(long id);
 
     List<GroupUser> findByUserId(long userId);

@@ -26,6 +26,56 @@
     <div id="page-content-wrapper">
         <div class="container-fluid">
 
+            <div class="row">
+                <div class="col-8 offset-2">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h3>Grupės nario informacijos langas</h3>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Username:</b>&emsp;<i th:text="${groupUserLookup.getUser().getUsername()}">someUsername</i></li>
+                            <li class="list-group-item"><b>Vardas:</b>&emsp;<i th:text="${groupUserLookup.getUser().getFirstname()}">Vardenis</i></li>
+                            <li class="list-group-item"><b>Pavardė:</b>&emsp;<i th:text="${groupUserLookup.getUser().getLastname()}">Pavardenis</i></li>
+                            <li class="list-group-item"><b>E. paštas:</b>&emsp;<i th:text="${groupUserLookup.getUser().getEmail()}">email@email.com</i></li>
+                            <li class="list-group-item"><b>Narys nuo:</b>&emsp;<i th:text="${groupUserLookup.getDateJoined()}">2018-05-27</i></li>
+                            <li class="list-group-item" th:if="${groupUser.getRole().name() == 'ADMIN'}"><b>Rolė:</b>
+                                <form action="/update/group_member" method="post">
+                                    <div class="row">
+                                        <div class="offset-1">
+                                            <th:block th:switch="${groupUserLookup.getRole().name()}">
+                                                <th:block th:case="'REGULAR'">
+                                                    <div class="radio"><label><input type="radio" name="role" value="REGULAR" checked>Paprastas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="WRITER">Rašytojas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="ADMIN">Administratorius</label></div>
+                                                </th:block>
+                                                <th:block th:case="'WRITER'">
+                                                    <div class="radio"><label><input type="radio" name="role" value="REGULAR">Paprastas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="WRITER" checked>Rašytojas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="ADMIN">Administratorius</label></div>
+                                                </th:block>
+                                                <th:block th:case="'ADMIN'">
+                                                    <div class="radio"><label><input type="radio" name="role" value="REGULAR">Paprastas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="WRITER">Rašytojas</label></div>
+                                                    <div class="radio"><label><input type="radio" name="role" value="ADMIN" checked>Administratorius</label></div>
+                                                </th:block>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <input name="groupId" type="hidden" th:value="${group.getId()}">
+                                    <input name="groupUserId" type="hidden" th:value="${groupUserLookup.getId()}">
+                                    <br>
+                                    <div class="row">
+                                        <div class="col offset-1">
+                                            <button type="submit" class="btn btn-secondary">Išsaugoti</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

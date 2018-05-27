@@ -19,6 +19,16 @@ public class GroupUserServiceImpl implements GroupUserService {
     private GroupUserRepository groupUserRepository;
 
     @Override
+    public GroupUser findById(long id) {
+        return groupUserRepository.findById(id).get();
+    }
+
+    @Override
+    public void save(GroupUser groupUser) {
+        groupUserRepository.save(groupUser);
+    }
+
+    @Override
     public List<GroupUser> findByGroupId(long id) {
         return groupUserRepository.findByGroupId(id);
     }

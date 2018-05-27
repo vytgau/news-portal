@@ -48,7 +48,7 @@
 
                                 <div class="row rounded mx-2 py-1 h-100 group-members-search-item" th:each="member: ${groupMembers}">
                                     <div class="col-10 my-auto">
-                                        <a th:href="@{member(groupid=${member.getGroup().getId()},groupMemberId=${member.getId()})}"
+                                        <a th:href="@{member(groupId=${member.getGroup().getId()},groupMemberId=${member.getId()})}"
                                            th:text="${member.getUser().getUsername()} + ' (' + ${member.getUser().getFirstname()} + ' ' + ${member.getUser().getLastname()} + ')'">Username(Vardas,
                                             Pavarde)</a>
                                     </div>
@@ -187,7 +187,7 @@
 
                         var item = '<div class="row rounded mx-2 py-1 h-100 group-members-search-item">';
                         item = item.concat('<div class="col-10 my-auto">');
-                        item = item.concat('<a href="member?groupId=' + value.group.id + '&groupMemberId=' + value.id + '">');
+                        item = item.concat('<a href="/group/member?groupId=' + value.group.id + '&groupMemberId=' + value.id + '">');
                         item = item.concat(username + '(<i>' + firstname + ', ' + lastname + ')');
                         item = item.concat('</a>');
                         item = item.concat('</div>');

@@ -28,27 +28,6 @@ public class GroupController {
     @Autowired private GroupUserService groupUserService;
 
     /**
-     * Opens group member information page
-     */
-    @GetMapping("/group/member")
-    public String groupMember(@RequestParam String groupId, @RequestParam String groupMemberId, Model model, Principal principal) {
-
-        String username = principal.getName();
-
-        Group group = groupService.findById(Long.valueOf(groupId));
-        User user = userService.findByUsername(username);
-        GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
-        List<GroupUser> groupMembers = groupUserService.findByGroupId(Long.valueOf(groupId));
-
-
-        model.addAttribute("group", group);
-        model.addAttribute("groupUser", groupUser);
-        model.addAttribute("groupMembers", groupMembers);
-
-        return "group-member";
-    }
-
-    /**
      * Opens group members management page
      */
     @GetMapping("group/members")
