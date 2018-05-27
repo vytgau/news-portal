@@ -31,11 +31,14 @@
                     <td th:text="${item.getEditDate()}">-</td>
                     <td class="text-right">
                         <a class="btn btn-outline-primary" th:href="@{/article-edit(articleId=${item.getId()})}">Redaguoti</a>
-                        <i class="fa fa-exclamation-triangle"></i>
+                        <a th:href="@{/article-reports(articleId=${item.getId()})}">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </a>
                         <a id="delete-modal-btn" th:data-article="${item.getId()}" data-toggle="modal" data-target="delete-modal" th:attr="data-target='#modal-warning'+${item.getId()}">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>
+
                     <div class="modal" th:id="modal-warning+${item.getId()}">
                         <div class="modal-dialog">
                             <div class="modal-content">

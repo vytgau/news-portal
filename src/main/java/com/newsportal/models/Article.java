@@ -46,6 +46,9 @@ public class Article {
     )
     private Set<Group> groups;
 
+    @OneToMany(mappedBy = "article")
+    private Set<Report> reports;
+
     @Lob
     @Column(columnDefinition="mediumtext")
     @Basic(fetch = FetchType.LAZY)
@@ -165,4 +168,6 @@ public class Article {
     public void setInMainGroup(boolean inMainGroup) {
         this.inMainGroup = inMainGroup;
     }
+
+    public Set<Report> getReports() { return reports; }
 }
