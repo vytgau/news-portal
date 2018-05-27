@@ -216,8 +216,16 @@ public class GroupController {
     public String openGroupEditForm(@RequestParam(name = "groupID")Long groupID,
                                   Principal principal,
                                   Model model) {
-            Group group = groupService.findById(groupID);
-            model.addAttribute("group", group);
+        Group group = groupService.findById(groupID);
+
+
+        String username = principal.getName();
+
+        User user = userService.findByUsername(username);
+        GroupUser groupUser = groupUserService.findFirstByGroupIdAndUserId(group.getId(), user.getId());
+
+        model.addAttribute("group", group);
+        model.addAttribute("groupUser", groupUser);
 
             return "edit-group";
         }
