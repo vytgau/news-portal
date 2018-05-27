@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+
+    <th:block th:switch="${inGroup}">
+        <th:block th:case="true">
+            <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+        </th:block>
+        <th:block th:case="*">
+            <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+        </th:block>
+    </th:block>
+
+    <!-- Page Content -->
+    <div class="container">
+        <h1>Keiskite naudotojo duomenis</h1>
+        <form id="register-form"  method="post" th:object="${user}" th:fragment="registration-form">
+            <div class="form-group">
+                <label for="reg-username">Prisijungimo vardas</label>
+                <input tabindex="1" class="form-control" id="reg-username" th:field="*{username}" th:errorclass="fieldError">
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error">Incorrect username</p>
+            </div>
+            <div class="form-group">
+                <label>Vardas</label>
+                <input tabindex="2" class="form-control" placeholder="Vardas" th:field="*{firstname}" th:errorclass="fieldError">
+                <p th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="error">Incorrect firstname</p>
+            </div>
+            <div class="form-group">
+                <label>Vardas</label>
+                <input tabindex="3" class="form-control" placeholder="Pavardė" th:field="*{lastname}" th:errorclass="fieldError">
+                <p th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="error">Incorrect lastname</p>
+            </div>
+            <div class="form-group">
+                <label>Vardas</label>
+                <input tabindex="4" class="form-control" placeholder="E. paštas" th:field="*{email}" th:errorclass="fieldError">
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error">Incorrect email</p>
+            </div>
+            <div class="form-group">
+                <label>Lytis</label>
+                <select th:field="*{gender}">
+                    <option th:each="gendera : ${genders}"
+                            th:value="${gendera}"
+                            th:utext="${gendera}">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Rolė</label>
+                <select th:field="*{role}">
+                    <option th:each="rolea : ${roles}"
+                            th:value="${rolea}"
+                            th:utext="${rolea}"/>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <input type="hidden" class="form-control" value="${user.id}" th:field="*{id}">
+                        <input type="submit" name="register-submit" id="register-submit" tabindex="7"
+                               class="form-control btn btn-info" value="Registruotis">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>

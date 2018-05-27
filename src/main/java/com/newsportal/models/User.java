@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -16,7 +18,6 @@ import java.util.Date;
 public class User {
 
     //TODO check fields for special characters
-
     @Id
     @GeneratedValue
     private Long id;
@@ -59,7 +60,8 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthdate;
 
-    public User() {}
+    public User() {
+    }
 
     //Laikinas default User sukurimas testavimui
     public User(String username, String firstname, String lastname) {
@@ -152,5 +154,48 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String dateToString() {
+        if (birthdate != null) {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.format(birthdate);
+        }
+        else
+            return "Nenustatyta";
+    }
+
+    public String isBlockedString() {
+        if (isBanned)
+            return "Taip";
+        else
+            return "Ne";
+    }
+
+    public String getGenderString() {
+        if (gender != null) {
+            if (gender.toString().equals("MALE"))
+                return "Vyras";
+            else
+                return "Moteris";
+        }
+        else return "Nenustatyta";
+    }
+
+    public String getRoleString() {
+        if (role != null) {
+            switch (role.toString()) {
+                case "ADMIN":
+                    return "Administratorius";
+                case "WRITER":
+                    return "Rašytojas";
+                case "REGULAR":
+                    return "Paprastas naudotojas";
+                default:
+                    return "Neatpažintas";
+
+            }
+        }
+        else return "Nenustatyta";
     }
 }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+
+<div th:if="${deleted} == 1">
+    <div class="alert alert-info">
+        Naudotojas ištrintas.
+    </div>
+</div>
+<div th:if="${deleted} ==2">
+    <div class="alert alert-info">
+        Naudotojas užblokuotas.
+    </div>
+</div>
+</div>
+<div id="wrapper">
+
+    <th:block th:switch="${inGroup}">
+        <th:block th:case="true">
+            <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+        </th:block>
+        <th:block th:case="*">
+            <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+        </th:block>
+    </th:block>
+    <!-- Page Content -->
+    <div class="container">
+        <h1>Statistika</h1>
+        <p>Iš viso sistemoje prisiregistravusių žmonių skaičius:</p>
+        <span th:text="${total}"></span>
+        <br>
+        <p><strong>Užblokuoti žmonės:</strong></p>
+        <span th:text="${blocked}"></span>
+        <br>
+        <h2>Lytys</h2>
+        <span th:text="${total}"></span>
+        <p>Vyrų skaicius:</p>
+        <span th:text="${maleCount}"></span>
+        <p>Moterų skaičius:</p>
+        <span th:text="${femaleCount}"></span>
+        <br>
+        <h2>Naudotojų tipai</h2>
+        <p>Rašytojai:</p>
+        <span th:text="${writer}"></span>
+        <p>Paprasti naudotojai:</p>
+        <span th:text="${regular}"></span>
+        <p>Administratoriai:</p>
+        <span th:text="${admin}"></span>
+    </div>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>

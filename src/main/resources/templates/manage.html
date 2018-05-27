@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+
+    <div th:if="${deleted} == 1">
+        <div class="alert alert-info">
+            Naudotojas ištrintas.
+        </div>
+    </div>
+<div th:if="${deleted} ==2">
+    <div class="alert alert-info">
+        Naudotojas užblokuotas.
+    </div>
+</div>
+</div>
+<div id="wrapper">
+
+    <th:block th:switch="${inGroup}">
+        <th:block th:case="true">
+            <th:block th:insert="~{fragments/group-side-menu :: group-side-menu}"></th:block>
+        </th:block>
+        <th:block th:case="*">
+            <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+        </th:block>
+    </th:block>
+
+    <!-- Page Content -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Naudotojo vardas</th>
+            <th scope="col">Vardas</th>
+            <th scope="col">Pavardė</th>
+            <th scope="col">Gimimo data</th>
+            <th scope="col">Ar užblokuotas?</th>
+            <th scope="col">Lytis</th>
+            <th scope="col">Rolė</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="user : ${allUsers}">
+            <tr>
+                <td th:text="${user.getId()}">...</td>
+                <td th:text="${user.getUsername()}">...</td>
+                <td th:text="${user.getFirstname()}">...</td>
+                <td th:text="${user.getLastname()}">...</td>
+                <td th:text="${user.dateToString()}">...</td>
+                <td th:text="${user.isBlockedString()}">...</td>
+                <td th:text="${user.getGenderString()}">...</td>
+                <td th:text="${user.getRoleString()}">...</td>
+                <td><a th:href="@{/edituser(id=${user.id})}">Redaguoti</a></td>
+                <td><a th:href="@{/deleteuser(id=${user.id})}">Trinti</a></td>
+                <td><a th:href="@{/blockuser(id=${user.id})}">Blokuoti</a></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- Inserting javascript files -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</div>
+
+</body>
+</html>
