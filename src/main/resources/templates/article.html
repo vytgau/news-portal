@@ -73,11 +73,12 @@
                     <h4><span th:text="${comments.size()}"></span> Komentarai</h4>
                 </div>
             </div>
-            <form>
+            <form method="post" action="/create/comment">
                 <div class="row">
                     <div class="col-4">
+                        <input type="hidden" name="articleId" th:value="${article.getId()}"/>
                         <div class="form-group">
-                            <textarea class="form-control" id="comment-textarea" rows="3"
+                            <textarea class="form-control" id="comment-textarea" name="commentText" rows="3"
                                       placeholder="Jūsų komentaras"></textarea>
                         </div>
                     </div>
