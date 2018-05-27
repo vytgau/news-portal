@@ -1,8 +1,6 @@
 package com.newsportal.services.implementation;
 
-import com.newsportal.models.Group;
-import com.newsportal.models.GroupInvitation;
-import com.newsportal.models.GroupUser;
+import com.newsportal.models.*;
 import com.newsportal.models.enums.InvitationState;
 import com.newsportal.models.enums.Role;
 import com.newsportal.repositories.GroupInvitationRepository;
@@ -13,10 +11,7 @@ import com.newsportal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.*;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -87,4 +82,39 @@ public class GroupServiceImpl implements GroupService {
     public void removeGroupUser(long groupUserId) {
         groupUserRepository.deleteById(groupUserId);
     }
+
+    @Override
+    public void createGroup(String groupTitle, String groupDescription, User admin) {
+        Group group = new Group();
+        group.setTitle(groupTitle);
+        group.setDescription(groupDescription);
+        group.setCreationDate(new Date());
+
+        groupRepository.save(group);
+
+        GroupUser groupAdmin = new GroupUser();
+        groupAdmin.setRole(Role.ADMIN);
+        groupAdmin.setDateJoined(new Date());
+        groupAdmin.setUser(admin);
+        groupAdmin.setGroup(group);
+
+        groupUserRepository.save(groupAdmin);
+    }
+
+    @Override
+    public void editGroup(String groupTitle, String groupDescription, Group group) {
+        group.setTitle(groupTitle);
+        group.setDescription(groupDescription);
+
+        groupRepository.save(group);
+    }
+
+    @Override
+    public void deleteGroup(int id) {
+        groupInvitationRepository.deleteAll(groupInvitationRepository.findByGroupId((long) id));
+        groupUserRepository.deleteAll(groupUserRepository.findByGroupId((long) id));
+        groupRepository.deleteById((long) id);
+
+    }
+
 }

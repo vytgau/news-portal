@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -21,10 +23,14 @@ import java.util.List;
 @Controller
 public class GroupController {
 
-    @Autowired private ArticleService articleService;
-    @Autowired private GroupService groupService;
-    @Autowired private UserService userService;
-    @Autowired private GroupUserService groupUserService;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private GroupService groupService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private GroupUserService groupUserService;
 
     /**
      * Opens group members management page
@@ -49,6 +55,7 @@ public class GroupController {
 
     /**
      * Opens group main page
+     *
      * @param id group id
      */
     @GetMapping("/group")
@@ -181,4 +188,49 @@ public class GroupController {
     public void removeGroupUser(@RequestParam("groupUserId") String groupUserId) {
         groupService.removeGroupUser(Long.valueOf(groupUserId));
     }
+
+    @GetMapping("/create/group")
+    public String openGroupCreationView() {
+        return "create-group";
+    }
+
+    @PostMapping("/create/group")
+    public RedirectView createGroup(
+            @RequestParam("groupTitle") String groupTitle,
+            @RequestParam("groupDescription") String groupDescription,
+            Principal principal) {
+        User admin = userService.findByUsername(principal.getName());
+        groupService.createGroup(groupTitle, groupDescription, admin);
+        return new RedirectView("/");
+    }
+
+    @PostMapping("/delete_group")
+    public RedirectView deleteGroup(
+            @RequestParam("groupID") String groupID,
+            Principal principal) {
+        groupService.deleteGroup(Integer.valueOf(groupID));
+        return new RedirectView("/");
+    }
+
+    @GetMapping(value = "/edit-group")
+    public String openGroupEditForm(@RequestParam(name = "groupID")Long groupID,
+                                  Principal principal,
+                                  Model model) {
+            Group group = groupService.findById(groupID);
+            model.addAttribute("group", group);
+
+            return "edit-group";
+        }
+
+    @PostMapping("/edit-group")
+    @ResponseStatus(value=HttpStatus.OK)
+    public RedirectView editArticle(
+            @RequestParam("groupTitle") String groupTitle,
+            @RequestParam("groupDescription") String groupDescription,
+            @RequestParam(name = "groupID")Long groupID
+    ) {
+            Group group = groupService.findById(Long.valueOf(groupID));
+            groupService.editGroup(groupTitle, groupDescription, group);
+            return new RedirectView("/");
+        }
 }

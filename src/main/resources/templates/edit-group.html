@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Inserting head tag -->
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">    <!-- Bootstrap core CSS -->
+    <link href="../css/hamburgers.min.css" rel="stylesheet">   <!-- Side menu toggler button (hamburger icon) -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">   <!-- Sidebar css -->
+    <link href="../css/site.css" rel="stylesheet">             <!-- Site custom css -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/css/tempusdominus-bootstrap-4.min.css" />
+    <script src="../js/jquery.min.js"></script>
+    <title>Grupės kūrimas</title>
+
+</head>
+<body>
+<!-- Inserting top navigation bar -->
+<th:block th:insert="~{fragments/top-navbar :: top-navbar}"></th:block>
+<div id="wrapper">
+
+    <th:block th:insert="~{fragments/home-side-menu :: home-side-menu}"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-8 offset-2">
+                    <div class="card">
+                        <h2 class="card-header text-center">Grupės kūrimas</h2>
+                        <div class="card-body">
+                            <form action="/edit-group" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="groupID" th:value="${group.getId()}"/>
+
+                                <div class="row form-group">
+                                    <label for="groupTitle" class="col-3 col-form-label"><i>Grupės pavadinimas:</i></label>
+                                    <div class="col-9">
+                                        <input name="groupTitle" type="text" class="form-control" id="groupTitle" placeholder="Grupės pavadinimas"  th:value="${group.getTitle()}">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-12">
+                                        <label for="groupDescription"><i>Grupės aprašymas:</i></label>
+                                        <textarea name="groupDescription" class="form-control" id="groupDescription" rows="8"  th:text="${group.getDescription()}">></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-success btn-block" id="article-creation-btn">Išsaugoti</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inserting invitations modal -->
+
+        </div>
+    </div>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/site.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/js/tempusdominus-bootstrap-4.min.js"></script>
+
+</div>
+
+</body>
+</html>

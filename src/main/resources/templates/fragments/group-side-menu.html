@@ -19,13 +19,12 @@
             <button type="button" class="btn sidebar-menu-btn" th:onclick="'window.location.href=\'' + @{/create/article(fromGroup=${group.id})} + '\''">Rašyti naują straipsnį</button>
         </li>
         <li th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}">
-            <button type="button" class="btn sidebar-menu-btn">Redaguoti grupę</button>
+            <button type="button" class="btn sidebar-menu-btn" th:onclick="'window.location.href=\'' + @{/edit-group(groupID=${group.id})} + '\''">Redaguoti grupę</button>
         </li>
         <li th:if="${groupUser.role == T(com.newsportal.models.enums.Role).ADMIN}">
-            <button type="button" class="btn sidebar-menu-btn">Ištrinti grupę</button>
+            <button  id = "delete-group" type="button" class="btn sidebar-menu-btn"  th:value="${group.id}">Ištrinti grupę</button>
         </li>
     </ul>
 </div>
-
 </body>
 </html>

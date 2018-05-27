@@ -10,9 +10,14 @@ import java.util.List;
 public interface GroupInvitationRepository extends JpaRepository<GroupInvitation, Long> {
 
     @Query("SELECT groupInvitation FROM GroupInvitation groupInvitation " +
+            "WHERE groupInvitation.group.id = :id")
+    List<GroupInvitation> findByGroupId(@Param("id") long id);
+
+    @Query("SELECT groupInvitation FROM GroupInvitation groupInvitation " +
            "WHERE groupInvitation.user.id IN (SELECT user.id FROM User user " +
            "WHERE user.username = :username) " +
            "AND groupInvitation.state = 'NEW'")
     List<GroupInvitation> findNewInvitations(@Param("username") String username);
+
 
 }
