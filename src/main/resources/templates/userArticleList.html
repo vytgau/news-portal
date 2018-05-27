@@ -14,13 +14,23 @@
     <div id="page-content-wrapper">
         <table class="table table-hover table-striped">
             <thead>
-                <th class="thead-light" colspan="2">Mano straipsniai</th>
+                <tr>
+                    <th class="thead-light" colspan="4">Mano straipsniai</th>
+                </tr>
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Sukūrimo data</th>
+                    <th>Redagavimo data</th>
+                    <th class="text-right">Veiksmai</th>
+                </tr>
             </thead>
             <tbody>
                 <tr th:each="item : ${page.getContent()}">
                     <td class="align-middle" th:text="${item.getTitle()}">Straipsnio pavadinimas</td>
+                    <td th:text="${item.getCreationDate()}"></td>
+                    <td th:text="${item.getEditDate()}">-</td>
                     <td class="text-right">
-                        <button class="btn btn-outline-primary" th:href="@{/article-edit(articleId=${item.getId()})}">Redaguoti</button>
+                        <a class="btn btn-outline-primary" th:href="@{/article-edit(articleId=${item.getId()})}">Redaguoti</a>
                         <i class="fa fa-exclamation-triangle"></i>
                         <i class="fa fa-trash"></i>
                     </td>
